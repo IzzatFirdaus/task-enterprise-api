@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class EditTask extends Component
 {
-    public bool $open = false;
+    public bool $isOpen = false;
 
     public ?int $taskId = null;
 
@@ -38,7 +38,7 @@ class EditTask extends Component
         $this->title = $task->title;
         $this->description = $task->description ?? '';
         $this->status = $task->status;
-        $this->open = true;
+        $this->isOpen = true;
     }
 
     public function update(): void
@@ -66,7 +66,7 @@ class EditTask extends Component
 
     public function close(): void
     {
-        $this->reset(['open', 'taskId', 'title', 'description', 'status']);
+        $this->reset(['isOpen', 'taskId', 'title', 'description', 'status']);
         $this->status = 'pending';
     }
 

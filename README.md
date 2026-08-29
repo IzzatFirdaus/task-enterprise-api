@@ -18,6 +18,10 @@ A Laravel 13 task management system demonstrating authenticated REST APIs, owner
 - Paginated API and Livewire task lists
 - Livewire task creation, editing, filtering, deletion, and statistics
 - Ownership checks on every task read and write
+- Enterprise admin RBAC with `super_admin`, `admin`, `moderator`, and `user` roles
+- Separate admin login at `/admin/login`
+- Admin dashboard for user and task moderation
+- Audit logging for administrative actions and security review
 
 ## Setup
 
@@ -34,6 +38,82 @@ php artisan serve
 ```
 
 Open `http://127.0.0.1:8000/`. The root URL redirects to the authenticated dashboard. Register a user or use a seeded account. Seeded users use the default factory password from `UserFactory`.
+
+## Admin system
+
+This application includes a parallel enterprise admin layer. Regular users use the standard dashboard, while administrators use the dedicated admin area with:
+
+- `/admin/login` for admin authentication
+- `/admin/dashboard` for system overview
+- `/admin/users` for user management
+- `/admin/tasks` for moderation
+- `/admin/audit-logs` for audit trail review
+- `/admin/settings` for super-admin settings
+
+### RBAC hierarchy
+
+The admin subsystem uses four explicit roles:
+
+- `super_admin`: full system access, can manage all users, tasks, settings, and audit logs
+- `admin`: operational admin access for user and task management
+- `moderator`: task oversight and moderation without user-management privileges
+- `user`: standard user role for personal task management only
+
+### Seeded admin accounts
+
+The seeded admin test accounts are:
+
+| Role | Email | Password |
+|---|---|---|
+| `super_admin` | `admin@example.com` | `password` |
+| `admin` | `admin2@example.com` | `password` |
+| `moderator` | `moderator@example.com` | `password` |
+
+These credentials are intended for local development and QA validation of the RBAC and audit boundaries.
+
+### Audit logging and schema
+
+Administrative actions are recorded in the `audit_logs` table with:
+
+- `admin_id`
+- `action`
+- `model_type`
+- `model_id`
+- `changes` as a JSON payload with before/after values
+- `ip_address`
+- `user_agent`
+- `created_at`
+
+This supports audit review, forensic investigation, and CSV export for super-admins.
+
+### Admin routes and API endpoints
+
+#### Web routes
+
+- `GET /admin/login` — admin sign-in page
+- `POST /admin/login` — authenticate an admin user
+- `GET /admin/dashboard` — admin overview
+- `GET /admin/users` — user management
+- `GET /admin/tasks` — task moderation
+- `GET /admin/audit-logs` — audit trail review
+- `GET /admin/settings` — system settings
+
+#### API routes
+
+- `POST /api/admin/login` — admin login endpoint
+- `GET /api/admin/users` — user listing
+- `PUT /api/admin/users/{user}` — user updates
+- `POST /api/admin/users/{user}/suspend` — suspend a user with reason
+- `POST /api/admin/users/{user}/unsuspend` — unsuspend a user
+- `POST /api/admin/users/{user}/roles/{role}` — assign a role
+- `GET /api/admin/tasks` — task list for moderation
+- `PUT /api/admin/tasks/{task}` — reassign or moderate a task
+- `POST /api/admin/tasks/bulk-action` — bulk task actions
+- `GET /api/admin/audit-logs` — view audit records
+- `GET /api/admin/audit-logs/export` — CSV export
+- `GET /api/admin/analytics/*` — admin analytics endpoints
+
+The admin system is documented in [ADMIN-SETUP.md](ADMIN-SETUP.md).
 
 ## API
 
@@ -115,8 +195,10 @@ Breeze provides session authentication for the dashboard at `/login`, `/register
 Tests are written for PHPUnit and are intentionally not run as part of setup instructions here.
 
 ```powershell
-php artisan test tests/Feature/TaskApiTest.php
+php artisan test --filter=AdminSystemTest
 ```
+
+Run the admin RBAC suite separately to validate role boundaries, guardrails, moderation flows, and audit-log assertions.
 
 ## Structure
 

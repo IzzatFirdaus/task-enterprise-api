@@ -1,47 +1,65 @@
 <x-guest-layout>
+    <div class="mb-6 text-center">
+        <h1 class="text-xl font-bold tracking-tight text-slate-900">Sign in to your account</h1>
+        <p class="mt-1 text-xs text-slate-500">Access your tasks, deliverables, and workspace.</p>
+    </div>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" class="space-y-4">
         @csrf
 
         <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <div class="space-y-1">
+            <x-input-label for="email" :value="__('Email Address')" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="name@company.com" />
+            <x-input-error :messages="$errors->get('email')" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="space-y-1">
+            <div class="flex items-center justify-between">
+                <x-input-label for="password" :value="__('Password')" />
+                @if (Route::has('password.request'))
+                    <a class="text-xs font-semibold text-cyan-700 hover:text-cyan-800 focus:outline-none" href="{{ route('password.request') }}">
+                        {{ __('Forgot password?') }}
+                    </a>
+                @endif
+            </div>
+            <x-text-input id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••" />
+            <x-input-error :messages="$errors->get('password')" />
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+        <div class="flex items-center justify-between pt-1">
+            <label for="remember_me" class="inline-flex items-center cursor-pointer">
+                <input id="remember_me" type="checkbox" class="h-4 w-4 rounded border-slate-300 text-cyan-700 focus:ring-cyan-500" name="remember">
+                <span class="ms-2 text-xs text-slate-600 font-medium">{{ __('Keep me signed in') }}</span>
             </label>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
+        <!-- Sign In Button -->
+        <div class="pt-2">
+            <x-primary-button class="w-full justify-center">
+                {{ __('Sign In') }}
             </x-primary-button>
+        </div>
+
+        <!-- Links -->
+        <div class="border-t border-slate-100 pt-4 text-center space-y-2">
+            <p class="text-xs text-slate-500">
+                Don't have an account?
+                <a class="font-semibold text-cyan-700 hover:text-cyan-800 ml-1" href="{{ route('register') }}">
+                    Create an account
+                </a>
+            </p>
+            <p class="text-xs text-slate-400">
+                Are you an administrator?
+                <a class="font-semibold text-slate-700 hover:text-slate-900 ml-1" href="{{ route('admin.login') }}">
+                    Enterprise Admin Login &rarr;
+                </a>
+            </p>
         </div>
     </form>
 </x-guest-layout>

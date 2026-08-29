@@ -67,7 +67,7 @@ class TaskApiTest extends TestCase
         $task = Task::factory()->create(['user_id' => $user->id]);
 
         $this->actingAs($user, 'sanctum')->deleteJson("/api/tasks/{$task->id}")->assertNoContent();
-        $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
+        $this->assertSoftDeleted('tasks', ['id' => $task->id]);
     }
 
     public function test_unauthenticated_users_cannot_access_task_endpoints(): void

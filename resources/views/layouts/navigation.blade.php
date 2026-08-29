@@ -15,6 +15,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if (auth()->user()?->hasAnyRole(['admin', 'super_admin', 'moderator']))
+                        <x-nav-link :href="auth()->user()->isAdmin() ? route('admin.dashboard') : route('admin.tasks.index')">
+                            {{ __('Admin Panel') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -70,6 +75,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if (auth()->user()?->hasAnyRole(['admin', 'super_admin', 'moderator']))
+                <x-responsive-nav-link :href="auth()->user()->isAdmin() ? route('admin.dashboard') : route('admin.tasks.index')">
+                    {{ __('Admin Panel') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
