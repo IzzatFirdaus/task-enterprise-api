@@ -1,0 +1,24 @@
+<section class="border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6"><h2 class="text-xl font-semibold text-slate-950">Create a task</h2><p class="mt-1 text-sm text-slate-500">Add a piece of work to your queue.</p></div>
+    <form wire:submit="save" class="space-y-5">
+        <div><label for="create-title" class="mb-2 block text-sm font-medium text-slate-700">Title</label><input id="create-title" type="text" wire:model.blur="title" maxlength="255" required class="w-full border-slate-300 px-3 py-2.5 text-sm shadow-sm focus:border-cyan-600 focus:ring-cyan-600" placeholder="e.g. Review release plan"><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?></div>
+        <div><label for="create-description" class="mb-2 block text-sm font-medium text-slate-700">Description <span class="font-normal text-slate-400">(optional)</span></label><textarea id="create-description" wire:model.blur="description" rows="4" maxlength="5000" class="w-full border-slate-300 px-3 py-2.5 text-sm shadow-sm focus:border-cyan-600 focus:ring-cyan-600" placeholder="Add context or acceptance criteria."></textarea><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?></div>
+        <div><label for="create-status" class="mb-2 block text-sm font-medium text-slate-700">Starting status</label><select id="create-status" wire:model="status" class="w-full border-slate-300 px-3 py-2.5 text-sm shadow-sm focus:border-cyan-600 focus:ring-cyan-600"><option value="pending">Pending</option><option value="in_progress">In progress</option><option value="completed">Completed</option></select></div>
+        <button type="submit" wire:loading.attr="disabled" class="w-full bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-cyan-800 disabled:opacity-60">Add task</button>
+    </form>
+</section>
+<?php /**PATH D:\Projects\task-enterprise-api\resources\views/livewire/create-task.blade.php ENDPATH**/ ?>

@@ -1,0 +1,2 @@
+<div class="flex items-center gap-3"><label for="task-status-filter" class="text-sm font-medium text-slate-700">Filter</label><select id="task-status-filter" wire:model.live="status" class="border-slate-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-cyan-600 focus:ring-cyan-600"><option value="all">All tasks</option><option value="pending">Pending</option><option value="in_progress">In progress</option><option value="completed">Completed</option></select></div>
+<?php /**PATH D:\Projects\task-enterprise-api\resources\views/livewire/task-filter.blade.php ENDPATH**/ ?>
