@@ -7,12 +7,12 @@
 
 @php
     $variantClasses = match ($variant) {
-        'secondary' => 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 hover:text-slate-900 focus:ring-slate-400 active:bg-slate-100 shadow-sm',
-        'danger' => 'bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500 active:bg-rose-800 shadow-sm',
-        'outline' => 'bg-transparent text-slate-700 border border-slate-300 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-400',
-        'ghost' => 'bg-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus:ring-slate-400',
-        'admin' => 'bg-slate-900 text-white hover:bg-cyan-700 focus:ring-cyan-500 active:bg-slate-950 shadow-sm',
-        default => 'bg-cyan-700 text-white hover:bg-cyan-800 focus:ring-cyan-500 active:bg-cyan-900 shadow-sm',
+        'secondary' => 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus:ring-slate-400 active:bg-slate-100 dark:active:bg-slate-700 shadow-sm',
+        'danger' => 'bg-rose-600 text-white hover:bg-rose-700 dark:hover:bg-rose-500 focus:ring-rose-500 active:bg-rose-800 shadow-sm',
+        'outline' => 'bg-transparent text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white focus:ring-slate-400',
+        'ghost' => 'bg-transparent text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white focus:ring-slate-400',
+        'admin' => 'bg-slate-900 dark:bg-slate-700 text-white hover:bg-cyan-700 dark:hover:bg-cyan-600 focus:ring-cyan-500 active:bg-slate-950 dark:active:bg-slate-800 shadow-sm',
+        default => 'bg-cyan-700 dark:bg-cyan-600 text-white hover:bg-cyan-800 dark:hover:bg-cyan-500 focus:ring-cyan-500 active:bg-cyan-900 dark:active:bg-cyan-700 shadow-sm',
     };
 
     $sizeClasses = match ($size) {
@@ -26,7 +26,7 @@
 <button
     type="{{ $type }}"
     {{ $attributes->merge([
-        'class' => "inline-flex items-center justify-center font-medium transition-all duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer select-none {$variantClasses} {$sizeClasses}",
+        'class' => "inline-flex items-center justify-center font-medium transition-all duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer select-none {$variantClasses} {$sizeClasses}",
     ]) }}
     @if ($loading)
         wire:loading.attr="disabled"

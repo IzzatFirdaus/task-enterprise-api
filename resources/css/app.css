@@ -1,3 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+/* Hide Alpine elements until Alpine initialises to prevent flash */
+[x-cloak] { display: none !important; }

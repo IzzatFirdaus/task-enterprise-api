@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-6 text-center">
-        <h1 class="text-xl font-bold tracking-tight text-slate-900">Sign in to your account</h1>
-        <p class="mt-1 text-xs text-slate-500">Access your tasks, deliverables, and workspace.</p>
+        <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Sign in to your account</h1>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Access your tasks, deliverables, and workspace.</p>
     </div>
 
     <!-- Session Status -->
@@ -22,7 +22,7 @@
             <div class="flex items-center justify-between">
                 <x-input-label for="password" :value="__('Password')" />
                 @if (Route::has('password.request'))
-                    <a class="text-xs font-semibold text-cyan-700 hover:text-cyan-800 focus:outline-none" href="{{ route('password.request') }}">
+                    <a class="text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 focus:outline-none" href="{{ route('password.request') }}">
                         {{ __('Forgot password?') }}
                     </a>
                 @endif
@@ -34,8 +34,8 @@
         <!-- Remember Me -->
         <div class="flex items-center justify-between pt-1">
             <label for="remember_me" class="inline-flex items-center cursor-pointer">
-                <input id="remember_me" type="checkbox" class="h-4 w-4 rounded border-slate-300 text-cyan-700 focus:ring-cyan-500" name="remember">
-                <span class="ms-2 text-xs text-slate-600 font-medium">{{ __('Keep me signed in') }}</span>
+                <input id="remember_me" type="checkbox" class="h-4 w-4 rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-cyan-700 dark:text-cyan-500 focus:ring-cyan-500" name="remember">
+                <span class="ms-2 text-xs text-slate-600 dark:text-slate-300 font-medium">{{ __('Keep me signed in') }}</span>
             </label>
         </div>
 
@@ -47,16 +47,16 @@
         </div>
 
         <!-- Links -->
-        <div class="border-t border-slate-100 pt-4 text-center space-y-2">
-            <p class="text-xs text-slate-500">
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center space-y-2">
+            <p class="text-xs text-slate-500 dark:text-slate-400">
                 Don't have an account?
-                <a class="font-semibold text-cyan-700 hover:text-cyan-800 ml-1" href="{{ route('register') }}">
+                <a class="font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 ml-1" href="{{ route('register') }}">
                     Create an account
                 </a>
             </p>
-            <p class="text-xs text-slate-400">
+            <p class="text-xs text-slate-400 dark:text-slate-500">
                 Are you an administrator?
-                <a class="font-semibold text-slate-700 hover:text-slate-900 ml-1" href="{{ route('admin.login') }}">
+                <a class="font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ml-1" href="{{ route('admin.login') }}">
                     Enterprise Admin Login &rarr;
                 </a>
             </p>

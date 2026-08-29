@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-6 text-center">
-        <h1 class="text-xl font-bold tracking-tight text-slate-900">Reset your password</h1>
-        <p class="mt-1 text-xs text-slate-500">
+        <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Reset your password</h1>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
             {{ __('Forgot your password? Enter your email address to receive a password reset link.') }}
         </p>
     </div>
@@ -25,8 +25,8 @@
             </x-primary-button>
         </div>
 
-        <div class="border-t border-slate-100 pt-4 text-center">
-            <a href="{{ route('login') }}" class="text-xs font-semibold text-cyan-700 hover:text-cyan-800">
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center">
+            <a href="{{ route('login') }}" class="text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300">
                 &larr; Back to sign in
             </a>
         </div>

@@ -10,20 +10,20 @@
 
     $colorClasses = match ($type) {
         'role' => match ($value) {
-            'super_admin' => 'bg-purple-50 text-purple-700 border-purple-200 ring-purple-600/20',
-            'admin' => 'bg-indigo-50 text-indigo-700 border-indigo-200 ring-indigo-600/20',
-            'moderator' => 'bg-sky-50 text-sky-700 border-sky-200 ring-sky-600/20',
-            default => 'bg-slate-50 text-slate-700 border-slate-200 ring-slate-600/20',
+            'super_admin' => 'bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800 ring-purple-600/20 dark:ring-purple-400/20',
+            'admin' => 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800 ring-indigo-600/20 dark:ring-indigo-400/20',
+            'moderator' => 'bg-sky-50 dark:bg-sky-950/60 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-800 ring-sky-600/20 dark:ring-sky-400/20',
+            default => 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 ring-slate-600/20 dark:ring-slate-400/20',
         },
         'account_status' => match ($value) {
-            'suspended', 'inactive' => 'bg-rose-50 text-rose-700 border-rose-200 ring-rose-600/20',
-            default => 'bg-emerald-50 text-emerald-700 border-emerald-200 ring-emerald-600/20',
+            'suspended', 'inactive' => 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800 ring-rose-600/20 dark:ring-rose-400/20',
+            default => 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 ring-emerald-600/20 dark:ring-emerald-400/20',
         },
         default => match ($value) {
-            'completed' => 'bg-emerald-50 text-emerald-700 border-emerald-200 ring-emerald-600/20',
-            'in_progress' => 'bg-cyan-50 text-cyan-700 border-cyan-200 ring-cyan-600/20',
-            'pending' => 'bg-amber-50 text-amber-700 border-amber-200 ring-amber-600/20',
-            default => 'bg-slate-50 text-slate-700 border-slate-200 ring-slate-600/20',
+            'completed' => 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800 ring-emerald-600/20 dark:ring-emerald-400/20',
+            'in_progress' => 'bg-cyan-50 dark:bg-cyan-950/60 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800 ring-cyan-600/20 dark:ring-cyan-400/20',
+            'pending' => 'bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800 ring-amber-600/20 dark:ring-amber-400/20',
+            default => 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 ring-slate-600/20 dark:ring-slate-400/20',
         },
     };
 

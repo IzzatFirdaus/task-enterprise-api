@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password', 'is_suspended', 'suspended_at', 'suspension_reason', 'last_admin_action_at'])]
+#[Fillable(['name', 'email', 'password', 'is_suspended', 'suspended_at', 'suspension_reason', 'last_admin_action_at', 'dark_mode'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -33,6 +33,16 @@ class User extends Authenticatable
     public function auditLogs(): HasMany
     {
         return $this->hasMany(AuditLog::class, 'admin_id');
+    }
+
+    public function isDarkMode(): bool
+    {
+        return (bool) $this->dark_mode;
+    }
+
+    public function setDarkMode(bool $value): void
+    {
+        $this->update(['dark_mode' => $value]);
     }
 
     public function hasRole(string|array $roles): bool
@@ -102,6 +112,7 @@ class User extends Authenticatable
             'is_suspended' => 'boolean',
             'suspended_at' => 'datetime',
             'last_admin_action_at' => 'datetime',
+            'dark_mode' => 'boolean',
         ];
     }
 }
