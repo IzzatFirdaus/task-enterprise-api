@@ -113,7 +113,7 @@ This supports audit review, forensic investigation, and CSV export for super-adm
 - `GET /api/admin/audit-logs/export` — CSV export
 - `GET /api/admin/analytics/*` — admin analytics endpoints
 
-The admin system is documented in [ADMIN-SETUP.md](ADMIN-SETUP.md).
+The current admin architecture is documented in [ARCHITECTURE.md](ARCHITECTURE.md). Historical admin setup material is preserved in [docs/v1-archive/ADMIN-SETUP.md](docs/v1-archive/ADMIN-SETUP.md).
 
 ## API
 

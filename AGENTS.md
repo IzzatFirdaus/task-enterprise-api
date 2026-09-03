@@ -1,4 +1,39 @@
 <laravel-boost-guidelines>
+## Repository Operating Contract
+
+This repository is an in-development Laravel 13 task-management application. Keep personal task flows and administrative RBAC flows separate. Do not change feature logic while performing documentation or architecture audits.
+
+### Safe change boundaries
+
+- Read `.ai/rules/index.md` and every matching rule file before editing files under a covered path.
+- Inspect sibling files and active route registration before adding a new implementation. A file that exists is not necessarily active.
+- Preserve user changes and historical documents. Never delete files or directories during audits; move superseded documentation to `docs/v1-archive/` and repair relative links.
+- Prefer the smallest focused change. Do not add dependencies, speculative modules, or new authorization sources without an explicit requirement.
+- Treat the role relationship as the current RBAC source while documenting the legacy `is_admin` compatibility behavior as technical debt.
+- Keep all administrative mutations auditable and retain owner scoping for personal task reads and writes.
+
+### Local conventions
+
+- Use Laravel controllers, Form Requests, Eloquent models/scopes, Blade, and Livewire components at the existing codebase's current abstraction level.
+- Keep web routes in `routes/web.php` and `routes/auth.php`; keep active API routes in `routes/api.php`. Verify route loading through `bootstrap/app.php`.
+- Use PHPUnit feature tests for request, authorization, validation, and ownership behavior. Run the narrowest relevant test file after each behavior change.
+- Use descriptive names, explicit PHP types, curly-braced control structures, and Pint for modified PHP files.
+- Do not treat placeholder assertions as coverage. Add assertions for the observable contract, especially authentication, ownership, privilege boundaries, validation, audit logging, and failure responses.
+
+### Verification baseline
+
+From the repository root, the focused baseline is:
+
+```powershell
+php artisan test --compact tests/Feature/TaskApiTest.php tests/Feature/Admin/AdminSystemTest.php
+php artisan route:list --except-vendor
+php artisan migrate:status
+npm run build
+vendor/bin/pint --dirty --format agent
+```
+
+The application defaults to SQLite, database sessions/cache/queues, and the log mailer. Do not describe those development defaults as production readiness.
+
 === foundation rules ===
 
 # Laravel Boost Guidelines
