@@ -4,8 +4,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="The requested Enterprise Tasks page could not be found.">
+        <meta name="robots" content="noindex,nofollow">
+        <link rel="canonical" href="{{ request()->url() }}">
         <title>Page Not Found | {{ config('app.name', 'Enterprise Tasks') }}</title>
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+        <link rel="icon" href="{{ asset('favicon-32x32.svg') }}" type="image/svg+xml" sizes="32x32">
+        <link rel="icon" href="{{ asset('favicon-192x192.svg') }}" type="image/svg+xml" sizes="192x192">
+        <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.svg') }}" sizes="180x180">
+        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        @if (config('app.seo.google_verification'))
+            <meta name="google-site-verification" content="{{ config('app.seo.google_verification') }}">
+        @endif
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="flex min-h-screen max-w-full items-center justify-center overflow-x-hidden bg-slate-100 px-4 font-sans text-slate-900 dark:bg-slate-900 dark:text-slate-100">

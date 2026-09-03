@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\TaskModerationController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicPageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -22,6 +23,15 @@ Route::get('/', function () {
 
     return redirect()->route('dashboard');
 });
+
+Route::get('/about', [PublicPageController::class, 'about'])->name('about');
+Route::get('/capabilities', [PublicPageController::class, 'capabilities'])->name('capabilities');
+Route::get('/capabilities/{capability}', [PublicPageController::class, 'capability'])->name('capabilities.show');
+Route::get('/blog', [PublicPageController::class, 'blog'])->name('blog.index');
+Route::get('/blog/{post}', [PublicPageController::class, 'post'])->name('blog.show');
+Route::get('/terms', [PublicPageController::class, 'terms'])->name('terms');
+Route::get('/sitemap.xml', [PublicPageController::class, 'sitemap'])->name('sitemap');
+Route::get('/google-site-verification.html', [PublicPageController::class, 'verification'])->name('google.verification');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

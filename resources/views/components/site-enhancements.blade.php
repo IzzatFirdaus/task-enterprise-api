@@ -42,7 +42,7 @@
     &uarr;
 </button>
 
-<a href="mailto:support@example.com" class="contact-button" aria-label="Contact support" title="Contact support">
+<a href="mailto:{{ config('app.seo.contact_email') }}" class="contact-button" aria-label="Contact support" title="Contact support">
     <span aria-hidden="true">?</span>
     <span class="sr-only">Contact support</span>
 </a>

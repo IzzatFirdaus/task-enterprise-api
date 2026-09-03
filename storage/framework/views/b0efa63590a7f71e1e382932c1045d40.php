@@ -1,0 +1,6 @@
+
+
+<?php $__env->startSection('content'); ?>
+<section class="mx-auto max-w-4xl px-5 py-20 sm:py-28"><a href="<?php echo e(route('capabilities')); ?>" class="text-sm font-bold text-cyan-300 hover:text-cyan-200">&lt;- All capabilities</a><p class="mt-12 text-sm font-bold uppercase tracking-[0.2em] text-orange-300">Capability</p><h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-6xl"><?php echo e($capability['title']); ?></h1><p class="mt-6 text-xl leading-9 text-slate-300"><?php echo e($capability['summary']); ?></p><div class="mt-12 border-l-2 border-cyan-500 pl-6 text-lg leading-8 text-slate-400"><p><?php echo e($capability['details']); ?></p></div><a href="<?php echo e(route('register')); ?>" class="mt-12 inline-flex rounded-lg bg-cyan-500 px-5 py-3 font-bold text-slate-950 hover:bg-cyan-300">Create your workspace</a></section>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.public', ['title' => $capability['title'], 'description' => $capability['summary']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Projects\task-enterprise-api\resources\views\public\capability.blade.php ENDPATH**/ ?>

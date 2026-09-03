@@ -1,0 +1,30 @@
+# Enterprise Tasks
+
+> Enterprise Tasks is a Laravel 13 application for private personal task management with a separate, role-protected administrative workspace.
+
+## Public pages
+
+- `/about`: product story, mission, and values.
+- `/capabilities`: overview of supported product capabilities.
+- `/capabilities/task-capture`, `/capabilities/progress-tracking`, `/capabilities/secure-apis`, `/capabilities/administrative-governance`: dedicated capability pages.
+- `/blog`: product and operational-practice journal.
+- `/terms`: terms of service.
+- `/sitemap.xml`: indexable public URLs.
+
+## Authenticated application
+
+- `/login`, `/register`: standard account access.
+- `/dashboard`: private personal task workspace.
+- `/api/tasks`: Sanctum-protected CRUD API scoped to the authenticated task owner.
+- `/admin/*`: role-protected staff workspace for moderation, users, audit logs, and settings.
+
+## Important boundaries
+
+- Personal task data is private and owner-scoped.
+- Admin authorization is role-based and separate from personal task flows.
+- Administrative mutations are auditable.
+- `/dashboard`, `/profile`, `/admin/`, and `/api/` are not indexable.
+
+## Stack
+
+Laravel 13, PHP 8.5, Blade, Livewire 4, Tailwind CSS 4, Vite, SQLite by default, Sanctum, and PHPUnit.

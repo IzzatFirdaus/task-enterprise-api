@@ -1,0 +1,6 @@
+
+
+<?php $__env->startSection('content'); ?>
+<article class="mx-auto max-w-3xl px-5 py-20 sm:py-28"><a href="<?php echo e(route('blog.index')); ?>" class="text-sm font-bold text-cyan-300 hover:text-cyan-200">&lt;- Back to journal</a><time class="mt-12 block text-xs font-bold uppercase tracking-widest text-orange-300" datetime="<?php echo e($post['date']); ?>"><?php echo e($post['date']); ?></time><h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-6xl"><?php echo e($post['title']); ?></h1><p class="mt-6 text-xl leading-9 text-slate-300"><?php echo e($post['description']); ?></p><div class="prose prose-invert mt-12 max-w-none whitespace-pre-line text-lg leading-9 text-slate-400"><?php echo e($post['body']); ?></div></article>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.public', ['title' => $post['title'], 'description' => $post['description']], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH D:\Projects\task-enterprise-api\resources\views\public\blog\show.blade.php ENDPATH**/ ?>

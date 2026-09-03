@@ -1,10 +1,34 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-user-pref="{{ auth()->check() ? (auth()->user()->dark_mode ? 'true' : 'false') : 'null' }}" class="h-full bg-slate-100 dark:bg-slate-900">
+    @php
+        $pageTitles = [
+            'dashboard' => 'Dashboard',
+            'profile.edit' => 'Profile Settings',
+        ];
+        $pageDescriptions = [
+            'dashboard' => 'Review your task workload, priorities, and progress in Enterprise Tasks.',
+            'profile.edit' => 'Manage your Enterprise Tasks profile and account security settings.',
+        ];
+        $routeName = request()->route()?->getName();
+        $pageTitle = $pageTitles[$routeName] ?? 'Workspace';
+        $pageDescription = $pageDescriptions[$routeName] ?? 'Organize operational work and keep team tasks moving with Enterprise Tasks.';
+    @endphp
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Enterprise Tasks') }}</title>
+        <meta name="robots" content="noindex,nofollow">
+        <link rel="canonical" href="{{ request()->url() }}">
+        <meta name="description" content="{{ $pageDescription }}">
+        <title>{{ $pageTitle }} | {{ config('app.name', 'Enterprise Tasks') }}</title>
+        <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+        <link rel="icon" href="{{ asset('favicon-32x32.svg') }}" type="image/svg+xml" sizes="32x32">
+        <link rel="icon" href="{{ asset('favicon-192x192.svg') }}" type="image/svg+xml" sizes="192x192">
+        <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.svg') }}" sizes="180x180">
+        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        @if (config('app.seo.google_verification'))
+            <meta name="google-site-verification" content="{{ config('app.seo.google_verification') }}">
+        @endif
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         <script>
@@ -35,7 +59,7 @@
         <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
                 <div class="flex items-center gap-6">
-                    <a href="{{ route('dashboard') }}" class="group flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 rounded-lg" aria-label="Enterprise Tasks Home">
+                    <a href="{{ url('/') }}" class="group flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 rounded-lg" aria-label="Enterprise Tasks Home">
                         <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-700 dark:bg-cyan-600 text-white shadow-sm transition-transform duration-200 group-hover:scale-105 group-hover:bg-cyan-800 dark:group-hover:bg-cyan-500">
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />

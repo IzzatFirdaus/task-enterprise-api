@@ -18,8 +18,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="description" content="{{ $pageTitle }} for the Enterprise Tasks workspace.">
+        <meta name="robots" content="index,follow">
+        <link rel="canonical" href="{{ request()->url() }}">
         <title>{{ $pageTitle }} | {{ config('app.name', 'Enterprise Tasks') }}</title>
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+        <link rel="icon" href="{{ asset('favicon-32x32.svg') }}" type="image/svg+xml" sizes="32x32">
+        <link rel="icon" href="{{ asset('favicon-192x192.svg') }}" type="image/svg+xml" sizes="192x192">
+        <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.svg') }}" sizes="180x180">
+        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        @if (config('app.seo.google_verification'))
+            <meta name="google-site-verification" content="{{ config('app.seo.google_verification') }}">
+        @endif
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         <script>

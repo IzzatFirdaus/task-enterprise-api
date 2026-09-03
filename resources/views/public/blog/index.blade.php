@@ -1,0 +1,5 @@
+@extends('layouts.public', ['title' => 'Journal', 'description' => 'Practical notes on personal task management, operational clarity, and accountable administration.'])
+
+@section('content')
+<section class="mx-auto max-w-6xl px-5 py-16 sm:py-24"><p class="text-sm font-bold uppercase tracking-[0.2em] text-orange-300">The journal</p><h1 class="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">Notes for work that moves.</h1><div class="mt-12 grid gap-5 md:grid-cols-2">@foreach ($posts as $post)<article class="rounded-xl border border-slate-800 bg-slate-900 p-6"><time class="text-xs font-bold uppercase tracking-widest text-slate-500" datetime="{{ $post['date'] }}">{{ $post['date'] }}</time><h2 class="mt-5 text-2xl font-bold text-white"><a href="{{ route('blog.show', $post['slug']) }}" class="hover:text-cyan-300">{{ $post['title'] }}</a></h2><p class="mt-3 leading-7 text-slate-400">{{ $post['description'] }}</p><a href="{{ route('blog.show', $post['slug']) }}" class="mt-6 inline-block text-sm font-bold text-cyan-300">Read article -&gt;</a></article>@endforeach</div></section>
+@endsection

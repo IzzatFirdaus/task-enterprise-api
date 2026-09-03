@@ -5,8 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <meta name="description" content="Enterprise Tasks keeps operational work organized, visible, and moving.">
+        <meta name="robots" content="index,follow">
+        <link rel="canonical" href="{{ request()->url() }}">
         <title>Enterprise Tasks | Operational Work Management</title>
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
+        <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
         @fonts
 

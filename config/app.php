@@ -54,6 +54,11 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'seo' => [
+        'google_verification' => env('GOOGLE_SITE_VERIFICATION'),
+        'contact_email' => env('CONTACT_EMAIL', 'support@example.com'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
