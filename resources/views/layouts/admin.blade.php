@@ -199,7 +199,7 @@
             </aside>
 
             <!-- Main Content Area -->
-            <main class="min-w-0 max-w-full flex-1">
+            <main id="main-content" class="min-w-0 max-w-full flex-1">
                 @if (session('status'))
                     <div class="mb-6 flex items-center gap-3 rounded-xl border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50 dark:bg-cyan-950/40 px-4 py-3 text-sm text-cyan-800 dark:text-cyan-300 shadow-sm" role="status">
                         <svg class="h-5 w-5 shrink-0 text-cyan-600 dark:text-cyan-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -256,6 +256,7 @@
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="-translate-x-full"
             id="admin-mobile-drawer"
+            data-focus-trap
             class="fixed inset-y-0 left-0 z-50 w-72 max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-900 p-6 shadow-2xl lg:hidden flex flex-col justify-between"
         >
             <div>
@@ -306,6 +307,8 @@
                 </a>
             </div>
         </div>
+
+        <x-site-enhancements />
 
         @livewireScripts
     </body>

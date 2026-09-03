@@ -63,8 +63,9 @@
 
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md px-4 sm:px-0">
             <div class="rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 sm:p-8 shadow-xl shadow-slate-200/50 dark:shadow-slate-950/50">
-                {{ $slot }}
+                <main id="main-content">{{ $slot }}</main>
             </div>
         </div>
+        <x-site-enhancements />
     </body>
 </html>

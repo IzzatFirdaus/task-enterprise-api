@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-100 dark:bg-slate-900">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-user-pref="{{ auth()->check() ? (auth()->user()->dark_mode ? 'true' : 'false') : 'null' }}" class="h-full bg-slate-100 dark:bg-slate-900">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +10,8 @@
         <script>
             (function() {
                 const stored = localStorage.getItem('darkMode');
-                const userPref = @auth {{ auth()->user()->dark_mode ? 'true' : 'false' }} @else null @endauth;
+                const userPrefValue = document.documentElement.dataset.userPref;
+                const userPref = userPrefValue === 'null' ? null : userPrefValue === 'true';
                 let isDark = false;
                 if (stored !== null) {
                     isDark = stored === 'true';
@@ -122,6 +123,7 @@
                     x-transition:leave="transition ease-in duration-100"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-2"
+                    data-focus-trap
                     class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 shadow-lg md:hidden"
                 >
                     <div class="space-y-1">
@@ -199,7 +201,7 @@
         @endif
 
         <!-- Main Content Area -->
-        <main class="flex-1">
+        <main id="main-content" class="flex-1">
             @yield('content')
         </main>
 
@@ -209,6 +211,8 @@
                 <p>&copy; {{ date('Y') }} {{ config('app.name', 'Enterprise Tasks') }}. All rights reserved.</p>
             </div>
         </footer>
+
+        <x-site-enhancements />
 
         @livewireScripts
     </body>
