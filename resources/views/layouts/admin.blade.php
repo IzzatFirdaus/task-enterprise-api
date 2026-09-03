@@ -1,16 +1,40 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-slate-100 dark:bg-slate-900">
+<html lang="en" data-user-pref="{{ auth()->check() ? (auth()->user()->dark_mode ? 'true' : 'false') : 'null' }}" class="h-full bg-slate-100 dark:bg-slate-900">
+    @php
+        $pageTitles = [
+            'admin.dashboard' => 'Administrative Dashboard',
+            'admin.tasks.index' => 'Task Moderation Queue',
+            'admin.users.index' => 'User Management',
+            'admin.users.edit' => 'Edit User',
+            'admin.settings.index' => 'System Settings',
+            'admin.audit-logs.index' => 'Audit Logs',
+        ];
+        $pageDescriptions = [
+            'admin.dashboard' => 'Monitor enterprise workload, user access, and administrative activity.',
+            'admin.tasks.index' => 'Review and manage tasks across the Enterprise Tasks workspace.',
+            'admin.users.index' => 'Manage user accounts, roles, and access status.',
+            'admin.users.edit' => 'Update user account details and role assignments.',
+            'admin.settings.index' => 'Configure system-wide Enterprise Tasks settings.',
+            'admin.audit-logs.index' => 'Inspect the recorded administrative activity history.',
+        ];
+        $routeName = request()->route()?->getName();
+        $pageTitle = $pageTitles[$routeName] ?? 'Administration';
+        $pageDescription = $pageDescriptions[$routeName] ?? 'Manage Enterprise Tasks users, workloads, and system operations.';
+    @endphp
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Enterprise Admin') }} - Administration</title>
+        <meta name="description" content="{{ $pageDescription }}">
+        <title>{{ $pageTitle }} | {{ config('app.name', 'Enterprise Tasks') }}</title>
+        <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         <script>
             (function() {
                 const stored = localStorage.getItem('darkMode');
-                const userPref = @auth {{ auth()->user()->dark_mode ? 'true' : 'false' }} @else null @endauth;
+                const userPrefValue = document.documentElement.dataset.userPref;
+                const userPref = userPrefValue === 'null' ? null : userPrefValue === 'true';
                 let isDark = false;
                 if (stored !== null) {
                     isDark = stored === 'true';
@@ -29,7 +53,7 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
-    <body class="flex min-h-full flex-col font-sans text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 antialiased selection:bg-cyan-500 selection:text-white" x-data="{ sidebarOpen: false }">
+    <body class="flex min-h-full max-w-full flex-col overflow-x-hidden font-sans text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 antialiased selection:bg-cyan-500 selection:text-white" x-data="{ sidebarOpen: false }">
         <!-- Admin Top Navigation -->
         <header class="sticky top-0 z-40 border-b border-slate-800 bg-slate-950 text-white">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
@@ -39,6 +63,8 @@
                         type="button"
                         @click="sidebarOpen = !sidebarOpen"
                         class="rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                        :aria-expanded="sidebarOpen"
+                        aria-controls="admin-mobile-drawer"
                         aria-label="Toggle admin sidebar"
                     >
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -46,7 +72,7 @@
                         </svg>
                     </button>
 
-                    <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+                    <a href="{{ url('/') }}" class="flex items-center gap-2.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
                         <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-600 text-white shadow-sm font-bold text-sm">
                             <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
@@ -173,7 +199,7 @@
             </aside>
 
             <!-- Main Content Area -->
-            <main class="min-w-0 flex-1">
+            <main class="min-w-0 max-w-full flex-1">
                 @if (session('status'))
                     <div class="mb-6 flex items-center gap-3 rounded-xl border border-cyan-200 dark:border-cyan-800/60 bg-cyan-50 dark:bg-cyan-950/40 px-4 py-3 text-sm text-cyan-800 dark:text-cyan-300 shadow-sm" role="status">
                         <svg class="h-5 w-5 shrink-0 text-cyan-600 dark:text-cyan-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -229,7 +255,8 @@
             x-transition:leave="transition ease-in duration-150"
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="-translate-x-full"
-            class="fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-slate-900 p-6 shadow-2xl lg:hidden flex flex-col justify-between"
+            id="admin-mobile-drawer"
+            class="fixed inset-y-0 left-0 z-50 w-72 max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-900 p-6 shadow-2xl lg:hidden flex flex-col justify-between"
         >
             <div>
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">

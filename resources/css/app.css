@@ -4,3 +4,16 @@
 
 /* Hide Alpine elements until Alpine initialises to prevent flash */
 [x-cloak] { display: none !important; }
+
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+html, body {
+	max-width: 100%;
+	overflow-x: hidden;
+}
+
+img, svg, video, canvas, pre, code, table {
+	max-width: 100%;
+}

@@ -1,16 +1,32 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full bg-slate-100 dark:bg-slate-900">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-user-pref="{{ auth()->check() ? (auth()->user()->dark_mode ? 'true' : 'false') : 'null' }}" class="h-full bg-slate-100 dark:bg-slate-900">
+    @php
+        $pageTitles = [
+            'dashboard' => 'Dashboard',
+            'profile.edit' => 'Profile Settings',
+        ];
+        $pageDescriptions = [
+            'dashboard' => 'Review your task workload, priorities, and progress in Enterprise Tasks.',
+            'profile.edit' => 'Manage your Enterprise Tasks profile and account security settings.',
+        ];
+        $routeName = request()->route()?->getName();
+        $pageTitle = $pageTitles[$routeName] ?? 'Workspace';
+        $pageDescription = $pageDescriptions[$routeName] ?? 'Organize operational work and keep team tasks moving with Enterprise Tasks.';
+    @endphp
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>{{ config('app.name', 'Enterprise Tasks') }}</title>
+        <meta name="description" content="{{ $pageDescription }}">
+        <title>{{ $pageTitle }} | {{ config('app.name', 'Enterprise Tasks') }}</title>
+        <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         <script>
             (function() {
                 const stored = localStorage.getItem('darkMode');
-                const userPref = @auth {{ auth()->user()->dark_mode ? 'true' : 'false' }} @else null @endauth;
+                const userPrefValue = document.documentElement.dataset.userPref;
+                const userPref = userPrefValue === 'null' ? null : userPrefValue === 'true';
                 let isDark = false;
                 if (stored !== null) {
                     isDark = stored === 'true';
@@ -29,12 +45,12 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
-    <body class="flex min-h-full flex-col font-sans text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 antialiased selection:bg-cyan-500 selection:text-white" x-data="{ mobileMenuOpen: false }">
+    <body class="flex min-h-full max-w-full flex-col overflow-x-hidden font-sans text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 antialiased selection:bg-cyan-500 selection:text-white" x-data="{ mobileMenuOpen: false }">
         <!-- Top Navigation -->
         <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
                 <div class="flex items-center gap-6">
-                    <a href="{{ route('dashboard') }}" class="group flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 rounded-lg" aria-label="Enterprise Tasks Home">
+                    <a href="{{ url('/') }}" class="group flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 rounded-lg" aria-label="Enterprise Tasks Home">
                         <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-700 dark:bg-cyan-600 text-white shadow-sm transition-transform duration-200 group-hover:scale-105 group-hover:bg-cyan-800 dark:group-hover:bg-cyan-500">
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -98,6 +114,7 @@
                             @click="mobileMenuOpen = !mobileMenuOpen"
                             class="inline-flex items-center justify-center rounded-lg p-2.5 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                             :aria-expanded="mobileMenuOpen"
+                            aria-controls="mobile-navigation"
                             aria-label="Toggle navigation menu"
                         >
                             <svg class="h-6 w-6" x-show="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -122,6 +139,7 @@
                     x-transition:leave="transition ease-in duration-100"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-2"
+                    id="mobile-navigation"
                     class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 shadow-lg md:hidden"
                 >
                     <div class="space-y-1">
@@ -199,7 +217,7 @@
         @endif
 
         <!-- Main Content Area -->
-        <main class="flex-1">
+        <main class="min-w-0 max-w-full flex-1">
             {{ $slot }}
         </main>
 

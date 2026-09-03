@@ -116,7 +116,7 @@
                             <div class="h-2.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700 ring-1 ring-slate-200/60 dark:ring-slate-600 ring-inset">
                                 <div
                                     class="h-full rounded-full {{ $color }} transition-all duration-500"
-                                    style="width: {{ $statusWidth }}%"
+                                    @style(['width' => $statusWidth . '%'])
                                 ></div>
                             </div>
                         </div>
