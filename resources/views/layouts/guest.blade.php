@@ -18,7 +18,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="description" content="{{ $pageTitle }} for the Enterprise Tasks workspace.">
-        <meta name="robots" content="index,follow">
+        <meta name="robots" content="noindex,nofollow">
         <link rel="canonical" href="{{ request()->url() }}">
         <title>{{ $pageTitle }} | {{ config('app.name', 'Enterprise Tasks') }}</title>
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
@@ -31,37 +31,26 @@
         @endif
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
-        <script>
-            (function() {
-                const stored = localStorage.getItem('darkMode');
-                const userPrefValue = document.documentElement.dataset.userPref;
-                const userPref = userPrefValue === 'null' ? null : userPrefValue === 'true';
-                let isDark = false;
-                if (stored !== null) {
-                    isDark = stored === 'true';
-                } else if (userPref !== null) {
-                    isDark = userPref;
-                } else {
-                    isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                }
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
-            })();
-        </script>
+            <script>
+                (() => {
+                    const stored = localStorage.getItem('theme');
+                    const isDark = stored === 'dark'
+                        || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+                    document.documentElement.classList.toggle('dark', isDark);
+                })();
+            </script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="flex min-h-full max-w-full flex-col justify-center overflow-x-hidden py-12 sm:px-6 lg:px-8 font-sans text-slate-900 dark:text-slate-100 bg-slate-50 dark:bg-slate-900 antialiased selection:bg-cyan-500 selection:text-white bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] dark:bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:16px_16px]">
         <div class="sm:mx-auto sm:w-full sm:max-w-md text-center">
-            <a href="/" class="inline-flex items-center gap-2.5 group focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-xl p-1">
-                <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-cyan-700 dark:bg-cyan-600 text-white shadow-md transition group-hover:bg-cyan-800 dark:group-hover:bg-cyan-500 group-hover:scale-105">
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                </div>
-            </a>
+            <div class="flex items-center justify-center gap-3">
+                <a href="{{ route('guest') }}" class="inline-flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-xl p-1">
+                    <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500 text-xs font-bold text-white">ET</span>
+                    <span class="flex flex-col text-left"><span class="text-sm font-semibold leading-none text-slate-900 dark:text-white">Enterprise Tasks</span><span class="mt-1 text-[10px] leading-none text-slate-500 dark:text-slate-400">Operational clarity</span></span>
+                </a>
+                    <button type="button" data-theme-toggle class="min-h-11 rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-600 hover:border-cyan-500 dark:border-slate-600 dark:text-slate-300" aria-label="Switch theme">Theme</button>
+            </div>
             <h2 class="mt-4 text-center text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                 Enterprise Tasks
             </h2>

@@ -15,8 +15,8 @@
         <!-- Email Address -->
         <div class="space-y-1">
             <x-input-label for="email" :value="__('Email Address')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus placeholder="name@company.com" />
-            <x-input-error :messages="$errors->get('email')" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus placeholder="name@company.com" aria-describedby="email-error" aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}" />
+            <x-input-error id="email-error" :messages="$errors->get('email')" />
         </div>
 
         <div class="pt-2">
@@ -26,7 +26,7 @@
         </div>
 
         <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center">
-            <a href="{{ route('login') }}" class="text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300">
+            <a href="{{ route('login') }}" class="inline-flex min-h-11 items-center text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500">
                 &larr; Back to sign in
             </a>
         </div>

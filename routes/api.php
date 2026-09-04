@@ -15,7 +15,9 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::apiResource('tasks', TaskController::class)->except(['create', 'edit']);
+    Route::apiResource('tasks', TaskController::class)
+        ->except(['create', 'edit'])
+        ->names('api.tasks');
 });
 
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->middleware('throttle:5,1');

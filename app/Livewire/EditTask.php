@@ -13,6 +13,8 @@ class EditTask extends Component
 {
     public bool $isOpen = false;
 
+    public bool $isPage = false;
+
     public ?int $taskId = null;
 
     public string $title = '';
@@ -20,6 +22,15 @@ class EditTask extends Component
     public string $description = '';
 
     public string $status = 'pending';
+
+    public function mount(?int $taskId = null): void
+    {
+        if ($taskId !== null) {
+            $this->loadTask($taskId);
+            $this->isOpen = true;
+            $this->isPage = true;
+        }
+    }
 
     protected function rules(): array
     {
@@ -33,12 +44,17 @@ class EditTask extends Component
     #[On('edit-task')]
     public function openEditor(int $taskId): void
     {
+        $this->loadTask($taskId);
+        $this->isOpen = true;
+    }
+
+    private function loadTask(int $taskId): void
+    {
         $task = $this->tasks()->findOrFail($taskId);
         $this->taskId = $task->getKey();
         $this->title = $task->title;
         $this->description = $task->description ?? '';
         $this->status = $task->status;
-        $this->isOpen = true;
     }
 
     public function update(): void
@@ -54,14 +70,22 @@ class EditTask extends Component
         $this->close();
         $this->dispatch('task-updated');
         session()->flash('success', 'Task updated successfully.');
+
+        if ($this->isPage) {
+            $this->redirectRoute('tasks.index');
+        }
     }
 
-    public function delete(): void
+    public function deleteTask(): void
     {
         $this->tasks()->findOrFail($this->taskId)->delete();
         $this->close();
         $this->dispatch('task-deleted');
         session()->flash('success', 'Task deleted successfully.');
+
+        if ($this->isPage) {
+            $this->redirectRoute('tasks.index');
+        }
     }
 
     public function close(): void

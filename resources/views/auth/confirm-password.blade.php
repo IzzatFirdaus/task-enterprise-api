@@ -13,9 +13,11 @@
             <x-text-input id="password" class="block mt-1 w-full"
                             type="password"
                             name="password"
-                            required autocomplete="current-password" />
+                            required autocomplete="current-password"
+                            aria-describedby="password-error"
+                            aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}" />
 
-            <x-input-error :messages="$errors->get('password')" />
+            <x-input-error id="password-error" :messages="$errors->get('password')" />
         </div>
 
         <div class="flex justify-end pt-2">

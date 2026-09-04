@@ -8,28 +8,31 @@ use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request): JsonResponse|View
     {
         $tasks = Task::query()
             ->forUser($request->user())
             ->latest()
             ->paginate(15);
 
-        return response()->json($tasks);
+        return $request->expectsJson()
+            ? response()->json($tasks)
+            : view('tasks.index', ['tasks' => $tasks]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): JsonResponse
+    public function create(): View
     {
-        return response()->json(['message' => 'This endpoint is not available for an API resource.'], 405);
+        return view('tasks.create');
     }
 
     /**
@@ -48,19 +51,23 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, Task $task): JsonResponse
+    public function show(Request $request, Task $task): JsonResponse|View
     {
         $this->ensureOwnership($request, $task);
 
-        return response()->json($task);
+        return $request->expectsJson()
+            ? response()->json($task)
+            : view('tasks.show', ['task' => $task]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Task $task): JsonResponse
+    public function edit(Request $request, Task $task): View
     {
-        return response()->json(['message' => 'This endpoint is not available for an API resource.'], 405);
+        $this->ensureOwnership($request, $task);
+
+        return view('tasks.edit', ['task' => $task]);
     }
 
     /**

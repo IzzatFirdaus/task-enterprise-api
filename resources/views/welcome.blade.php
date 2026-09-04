@@ -11,6 +11,16 @@
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 
+        <script>
+            (() => {
+                const stored = localStorage.getItem('theme');
+                const isDark = stored === 'dark'
+                    || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+                document.documentElement.classList.toggle('dark', isDark);
+            })();
+        </script>
+
         @fonts
 
         <!-- Styles / Scripts -->
@@ -28,11 +38,12 @@
                 <nav class="flex items-center justify-end gap-4">
                     @auth
                         <a
-                            href="{{ url('/dashboard') }}"
+                            href="{{ route('dashboard') }}"
                             class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal"
                         >
                             Dashboard
                         </a>
+                        <button type="button" data-theme-toggle class="inline-block border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]" aria-label="Switch theme">Theme</button>
                     @else
                         <a
                             href="{{ route('login') }}"
@@ -48,6 +59,7 @@
                                 Register
                             </a>
                         @endif
+                        <button type="button" data-theme-toggle class="inline-block border border-transparent px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#19140035] dark:text-[#EDEDEC] dark:hover:border-[#3E3E3A]" aria-label="Switch theme">Theme</button>
                     @endauth
                 </nav>
             @endif

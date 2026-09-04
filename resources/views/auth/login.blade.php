@@ -13,8 +13,8 @@
         <!-- Email Address -->
         <div class="space-y-1">
             <x-input-label for="email" :value="__('Email Address')" />
-            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="name@company.com" />
-            <x-input-error :messages="$errors->get('email')" />
+            <x-text-input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" placeholder="name@company.com" aria-describedby="email-error" aria-invalid="{{ $errors->has('email') ? 'true' : 'false' }}" />
+            <x-input-error id="email-error" :messages="$errors->get('email')" />
         </div>
 
         <!-- Password -->
@@ -22,19 +22,19 @@
             <div class="flex items-center justify-between">
                 <x-input-label for="password" :value="__('Password')" />
                 @if (Route::has('password.request'))
-                    <a class="text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 focus:outline-none" href="{{ route('password.request') }}">
+                    <a class="inline-flex min-h-11 items-center text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500" href="{{ route('password.request') }}">
                         {{ __('Forgot password?') }}
                     </a>
                 @endif
             </div>
-            <x-text-input id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••" />
-            <x-input-error :messages="$errors->get('password')" />
+            <x-text-input id="password" type="password" name="password" required autocomplete="current-password" placeholder="••••••••" aria-describedby="password-error" aria-invalid="{{ $errors->has('password') ? 'true' : 'false' }}" />
+            <x-input-error id="password-error" :messages="$errors->get('password')" />
         </div>
 
         <!-- Remember Me -->
         <div class="flex items-center justify-between pt-1">
-            <label for="remember_me" class="inline-flex items-center cursor-pointer">
-                <input id="remember_me" type="checkbox" class="h-4 w-4 rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-cyan-700 dark:text-cyan-500 focus:ring-cyan-500" name="remember">
+            <label for="remember_me" class="inline-flex min-h-11 items-center cursor-pointer">
+                <input id="remember_me" type="checkbox" class="h-5 w-5 rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-cyan-700 dark:text-cyan-500 focus:ring-cyan-500" name="remember">
                 <span class="ms-2 text-xs text-slate-600 dark:text-slate-300 font-medium">{{ __('Keep me signed in') }}</span>
             </label>
         </div>
@@ -50,13 +50,13 @@
         <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center space-y-2">
             <p class="text-xs text-slate-500 dark:text-slate-400">
                 Don't have an account?
-                <a class="font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 ml-1" href="{{ route('register') }}">
+                <a class="inline-flex min-h-11 items-center font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 ml-1" href="{{ route('register') }}">
                     Create an account
                 </a>
             </p>
             <p class="text-xs text-slate-400 dark:text-slate-500">
                 Are you an administrator?
-                <a class="font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ml-1" href="{{ route('admin.login') }}">
+                <a class="inline-flex min-h-11 items-center font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ml-1" href="{{ route('admin.login') }}">
                     Enterprise Admin Login &rarr;
                 </a>
             </p>

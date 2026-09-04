@@ -1,2 +1,0 @@
-<a <?php echo e($attributes->merge(['class' => 'block w-full px-4 py-2 text-start text-sm leading-5 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:bg-slate-100 dark:focus:bg-slate-700 transition duration-150 ease-in-out'])); ?>><?php echo e($slot); ?></a>
-<?php /**PATH D:\Projects\task-enterprise-api\resources\views\components\dropdown-link.blade.php ENDPATH**/ ?>

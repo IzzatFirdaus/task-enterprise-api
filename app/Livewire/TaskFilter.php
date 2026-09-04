@@ -9,6 +9,8 @@ class TaskFilter extends Component
 {
     public string $status = 'all';
 
+    public string $search = '';
+
     public function updatedStatus(string $status): void
     {
         validator(['status' => $status], [
@@ -16,6 +18,11 @@ class TaskFilter extends Component
         ])->validate();
 
         $this->dispatch('status-changed', status: $status);
+    }
+
+    public function updatedSearch(string $search): void
+    {
+        $this->dispatch('search-changed', search: $search);
     }
 
     public function render()

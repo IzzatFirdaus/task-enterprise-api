@@ -33,12 +33,12 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         <script>
             (function() {
-                const stored = localStorage.getItem('darkMode');
+                const stored = localStorage.getItem('theme');
                 const userPrefValue = document.documentElement.dataset.userPref;
                 const userPref = userPrefValue === 'null' ? null : userPrefValue === 'true';
                 let isDark = false;
                 if (stored !== null) {
-                    isDark = stored === 'true';
+                    isDark = stored === 'dark';
                 } else if (userPref !== null) {
                     isDark = userPref;
                 } else {

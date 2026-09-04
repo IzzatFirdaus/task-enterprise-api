@@ -19,8 +19,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta name="robots" content="noindex,nofollow">
         <link rel="canonical" href="{{ request()->url() }}">
-        <meta name="description" content="{{ $pageDescription }}">
-        <title>{{ $pageTitle }} | {{ config('app.name', 'Enterprise Tasks') }}</title>
+        <meta name="description" content="@yield('description', $pageDescription)">
+        <title>@yield('title', $pageTitle) | {{ config('app.name', 'Enterprise Tasks') }}</title>
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
         <link rel="icon" href="{{ asset('favicon-32x32.svg') }}" type="image/svg+xml" sizes="32x32">
         <link rel="icon" href="{{ asset('favicon-192x192.svg') }}" type="image/svg+xml" sizes="192x192">
@@ -33,22 +33,11 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
         <script>
             (function() {
-                const stored = localStorage.getItem('darkMode');
-                const userPrefValue = document.documentElement.dataset.userPref;
-                const userPref = userPrefValue === 'null' ? null : userPrefValue === 'true';
-                let isDark = false;
-                if (stored !== null) {
-                    isDark = stored === 'true';
-                } else if (userPref !== null) {
-                    isDark = userPref;
-                } else {
-                    isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                }
-                if (isDark) {
-                    document.documentElement.classList.add('dark');
-                } else {
-                    document.documentElement.classList.remove('dark');
-                }
+                const stored = localStorage.getItem('theme');
+                const isDark = stored === 'dark'
+                    || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+                document.documentElement.classList.toggle('dark', isDark);
             })();
         </script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -59,16 +48,9 @@
         <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
                 <div class="flex items-center gap-6">
-                    <a href="{{ url('/') }}" class="group flex items-center gap-2.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 rounded-lg" aria-label="Enterprise Tasks Home">
-                        <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-700 dark:bg-cyan-600 text-white shadow-sm transition-transform duration-200 group-hover:scale-105 group-hover:bg-cyan-800 dark:group-hover:bg-cyan-500">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-sm font-bold tracking-tight text-slate-950 dark:text-white">ENTERPRISE TASKS</span>
-                            <span class="text-[10px] font-medium uppercase tracking-widest text-slate-600 dark:text-slate-400">Workspace</span>
-                        </div>
+                    <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 rounded-lg" aria-label="Enterprise Tasks Dashboard">
+                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500 text-xs font-bold text-white">ET</span>
+                        <span class="flex flex-col"><span class="text-sm font-semibold leading-none text-slate-900 dark:text-white">Enterprise Tasks</span><span class="mt-1 text-[10px] leading-none text-slate-500 dark:text-slate-400">Operational clarity</span></span>
                     </a>
                 </div>
 
@@ -78,6 +60,9 @@
                         <nav class="flex items-center gap-1 text-sm font-medium" aria-label="Primary navigation">
                             <a href="{{ route('dashboard') }}" class="rounded-lg px-3 py-2 transition {{ request()->routeIs('dashboard') ? 'bg-cyan-50 dark:bg-cyan-950/60 font-semibold text-cyan-800 dark:text-cyan-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                                 Dashboard
+                            </a>
+                            <a href="{{ route('tasks.index') }}" class="rounded-lg px-3 py-2 transition {{ request()->routeIs('tasks.*') ? 'bg-cyan-50 dark:bg-cyan-950/60 font-semibold text-cyan-800 dark:text-cyan-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
+                                Tasks
                             </a>
                             <a href="{{ route('profile.edit') }}" class="rounded-lg px-3 py-2 transition {{ request()->routeIs('profile.*') ? 'bg-cyan-50 dark:bg-cyan-950/60 font-semibold text-cyan-800 dark:text-cyan-400' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white' }}">
                                 Profile
@@ -157,6 +142,9 @@
                         <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('profile.*') ? 'bg-cyan-50 dark:bg-cyan-950/60 font-semibold text-cyan-800 dark:text-cyan-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
                             Profile
                         </a>
+                        <a href="{{ route('tasks.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium {{ request()->routeIs('tasks.*') ? 'bg-cyan-50 dark:bg-cyan-950/60 font-semibold text-cyan-800 dark:text-cyan-400' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800' }}">
+                            Tasks
+                        </a>
                         @if (auth()->user()->hasAnyRole(['admin', 'super_admin', 'moderator']))
                             <a href="{{ auth()->user()->isAdmin() ? route('admin.dashboard') : route('admin.tasks.index') }}" class="flex items-center gap-2 rounded-lg bg-slate-900 dark:bg-slate-800 border border-slate-700 px-3 py-2.5 text-sm font-semibold text-white hover:bg-cyan-700 dark:hover:bg-cyan-600">
                                 <svg class="h-4 w-4 text-cyan-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -232,7 +220,14 @@
         <!-- Subtle Footer -->
         <footer class="border-t border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 text-center text-xs text-slate-500 dark:text-slate-400">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <p>&copy; {{ date('Y') }} {{ config('app.name', 'Enterprise Tasks') }}. All rights reserved.</p>
+                <div class="flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4">
+                    <p>&copy; {{ date('Y') }} {{ config('app.name', 'Enterprise Tasks') }}. All rights reserved.</p>
+                    <a href="mailto:{{ config('app.seo.contact_email') }}" class="font-medium text-cyan-700 hover:underline dark:text-cyan-400">{{ config('app.seo.contact_email') }}</a>
+                    @if (config('app.seo.contact_phone'))
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', config('app.seo.contact_phone')) }}" class="font-medium text-cyan-700 hover:underline dark:text-cyan-400">{{ config('app.seo.contact_phone') }}</a>
+                    @endif
+                    <a href="{{ route('terms') }}" class="font-medium text-cyan-700 hover:underline dark:text-cyan-400">Terms</a>
+                </div>
             </div>
         </footer>
 

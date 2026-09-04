@@ -38,9 +38,11 @@
                     type="password"
                     class="block w-full sm:w-3/4"
                     placeholder="{{ __('Password') }}"
+                    aria-describedby="delete-password-error"
+                    aria-invalid="{{ $errors->userDeletion->has('password') ? 'true' : 'false' }}"
                 />
 
-                <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
+                <x-input-error id="delete-password-error" :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
 
             <div class="mt-6 flex justify-end gap-3">

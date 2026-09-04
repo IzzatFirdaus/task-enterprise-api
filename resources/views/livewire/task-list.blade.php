@@ -49,9 +49,15 @@
                             <!-- Actions -->
                             <td class="py-3.5 pl-4 align-top text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-1.5">
-                                    <button
-                                        type="button"
-                                        wire:click="$dispatch('open-edit-task-modal', { id: {{ $task->id }} })"
+                                    <a
+                                        href="{{ route('tasks.show', $task) }}"
+                                        class="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 shadow-2xs transition hover:border-cyan-300 dark:hover:border-cyan-700 hover:bg-cyan-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                                        aria-label="View task {{ $task->title }}"
+                                    >
+                                        View
+                                    </a>
+                                    <a
+                                        href="{{ route('tasks.edit', $task) }}"
                                         class="inline-flex items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 shadow-2xs transition hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
                                         aria-label="Edit task {{ $task->title }}"
                                     >
@@ -59,7 +65,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                                         </svg>
                                         Edit
-                                    </button>
+                                    </a>
 
                                     <button
                                         type="button"

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPageController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,8 +22,8 @@ Route::get('/', function () {
         return redirect()->route('admin.tasks.index');
     }
 
-    return redirect()->route('dashboard');
-});
+    return view('public.guest');
+})->name('guest');
 
 Route::get('/about', [PublicPageController::class, 'about'])->name('about');
 Route::get('/capabilities', [PublicPageController::class, 'capabilities'])->name('capabilities');
@@ -36,6 +37,13 @@ Route::get('/google-site-verification.html', [PublicPageController::class, 'veri
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware('auth')->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
+    Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+    Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
+    Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
+});
 
 Route::middleware('guest')->group(function () {
     Route::get('/admin/login', [AdminLoginController::class, 'create'])->name('admin.login');

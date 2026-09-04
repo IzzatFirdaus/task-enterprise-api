@@ -23,7 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->redirectGuestsTo(function (Request $request): string {
-            return $request->is('admin/*') ? route('admin.login') : route('login');
+            return $request->is('admin/*') ? route('admin.login') : route('guest');
         });
     })
     ->withExceptions(function (Exceptions $exceptions): void {

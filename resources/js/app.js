@@ -16,6 +16,14 @@ const showToast = (message) => {
 	window.setTimeout(() => { toast.hidden = true; }, 2400);
 };
 
+const syncThemeButtons = () => {
+	const isDark = document.documentElement.classList.contains('dark');
+	document.querySelectorAll('[data-theme-toggle]').forEach((button) => {
+		button.textContent = isDark ? 'Light' : 'Dark';
+		button.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+	});
+};
+
 const initEnhancements = () => {
 	const search = document.querySelector('#site-search');
 	const searchInput = document.querySelector('#site-search-input');
@@ -49,6 +57,12 @@ const initEnhancements = () => {
 	};
 
 	document.addEventListener('click', (event) => {
+		const themeToggle = event.target.closest('[data-theme-toggle]');
+		if (themeToggle) {
+			document.documentElement.classList.toggle('dark');
+			localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+			syncThemeButtons();
+		}
 		const trigger = event.target.closest('[data-search-open]');
 		if (trigger && search) {
 			lastFocus = trigger;
@@ -218,6 +232,7 @@ const initEnhancements = () => {
 	}, { passive: true });
 	document.querySelector('#back-to-top')?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 	updateScrollUi();
+	syncThemeButtons();
 };
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initEnhancements);

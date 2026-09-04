@@ -1,15 +1,13 @@
 <div
     x-data="{
         isDark: @entangle('darkMode').live,
+        init() {
+            this.isDark = document.documentElement.classList.contains('dark');
+        },
         toggleTheme() {
             this.isDark = !this.isDark;
-            if (this.isDark) {
-                document.documentElement.classList.add('dark');
-                localStorage.setItem('darkMode', 'true');
-            } else {
-                document.documentElement.classList.remove('dark');
-                localStorage.setItem('darkMode', 'false');
-            }
+            document.documentElement.classList.toggle('dark', this.isDark);
+            localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
             // @entangle('.live') automatically syncs isDark to the server,
             // which triggers updatedDarkMode() to persist the preference.
             // Do NOT call $wire.toggle() here — it would double-flip the value.

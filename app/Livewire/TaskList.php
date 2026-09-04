@@ -15,10 +15,19 @@ class TaskList extends Component
 
     public string $status = 'all';
 
+    public string $search = '';
+
     #[On('status-changed')]
     public function updateStatus(string $status): void
     {
         $this->status = $status;
+        $this->resetPage();
+    }
+
+    #[On('search-changed')]
+    public function updateSearch(string $search): void
+    {
+        $this->search = $search;
         $this->resetPage();
     }
 
@@ -46,6 +55,10 @@ class TaskList extends Component
     {
         return Task::query()
             ->where('user_id', Auth::id())
+            ->when($this->search !== '', fn (Builder $query) => $query->where(function (Builder $query): void {
+                $query->where('title', 'like', "%{$this->search}%")
+                    ->orWhere('description', 'like', "%{$this->search}%");
+            }))
             ->when($this->status !== 'all', fn (Builder $query) => $query->byStatus($this->status));
     }
 

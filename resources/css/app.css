@@ -47,7 +47,7 @@ body { transition: background-color 180ms ease, color 180ms ease; }
 	transition: width 80ms linear;
 }
 
-.search-launch { position: fixed; top: 0.75rem; right: 1rem; z-index: 75; border: 1px solid #cbd5e1; border-radius: 0.55rem; background: rgb(255 255 255 / 0.9); padding: 0.35rem 0.65rem; color: #0e7490; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 10px rgb(15 23 42 / 0.08); }
+.search-launch { position: fixed; top: 0.75rem; right: 1rem; z-index: 75; min-height: 2.75rem; min-width: 2.75rem; border: 1px solid #cbd5e1; border-radius: 0.55rem; background: rgb(255 255 255 / 0.9); padding: 0.35rem 0.65rem; color: #0e7490; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 10px rgb(15 23 42 / 0.08); }
 .dark .search-launch { border-color: #475569; background: rgb(30 41 59 / 0.9); }
 .search-launch:hover { background: #cffafe; }
 
@@ -75,10 +75,10 @@ body { transition: background-color 180ms ease, color 180ms ease; }
 .cookie-banner { position: fixed; right: 1rem; bottom: 1rem; z-index: 85; display: flex; width: min(34rem, calc(100% - 2rem)); align-items: center; justify-content: space-between; gap: 1rem; border: 1px solid #cbd5e1; border-radius: 0.9rem; background: white; padding: 1rem; color: #0f172a; box-shadow: 0 12px 40px rgb(15 23 42 / 0.16); }
 .dark .cookie-banner { border-color: #334155; background: #1e293b; color: #f8fafc; }
 .cookie-actions { display: flex; flex-shrink: 0; gap: 0.5rem; }
-.cookie-button { border: 0; border-radius: 0.55rem; padding: 0.6rem 0.8rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+.cookie-button { min-height: 2.75rem; border: 1px solid #0e7490; border-radius: 0.55rem; padding: 0.6rem 0.8rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
 .cookie-button-primary { background: #0e7490; color: white; }
-.cookie-button-muted { background: #e2e8f0; color: #334155; }
-.dark .cookie-button-muted { background: #334155; color: #e2e8f0; }
+.cookie-button-muted { background: white; color: #0e7490; }
+.dark .cookie-button-muted { background: #1e293b; color: #a5f3fc; }
 .back-to-top { position: fixed; right: 1rem; bottom: 5.5rem; z-index: 70; background: #0e7490; color: white; box-shadow: 0 8px 24px rgb(15 23 42 / 0.2); }
 .contact-button { position: fixed; right: 1rem; bottom: 1rem; z-index: 70; display: grid; width: 2.8rem; height: 2.8rem; place-items: center; border-radius: 50%; background: #f97316; color: white; font-size: 1.25rem; font-weight: 800; box-shadow: 0 8px 24px rgb(15 23 42 / 0.22); transition: transform 150ms ease, background-color 150ms ease; }
 .contact-button:hover { transform: translateY(-3px); background: #ea580c; }
