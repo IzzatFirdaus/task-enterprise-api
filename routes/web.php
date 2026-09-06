@@ -9,7 +9,21 @@ use App\Http\Controllers\Auth\AdminLoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicPageController;
 use App\Http\Controllers\TaskController;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/healthz', fn () => response()->json(['status' => 'ok']))->name('healthz');
+
+Route::get('/readyz', function () {
+    try {
+        DB::connection()->getPdo();
+        DB::select('select 1');
+    } catch (Throwable) {
+        return response()->json(['status' => 'unavailable'], 503);
+    }
+
+    return response()->json(['status' => 'ready']);
+})->name('readyz');
 
 Route::get('/', function () {
     $user = request()->user();
@@ -31,7 +45,10 @@ Route::get('/capabilities/{capability}', [PublicPageController::class, 'capabili
 Route::get('/blog', [PublicPageController::class, 'blog'])->name('blog.index');
 Route::get('/blog/{post}', [PublicPageController::class, 'post'])->name('blog.show');
 Route::get('/terms', [PublicPageController::class, 'terms'])->name('terms');
+Route::get('/privacy', [PublicPageController::class, 'privacy'])->name('privacy');
+Route::get('/faq', [PublicPageController::class, 'faq'])->name('faq');
 Route::get('/sitemap.xml', [PublicPageController::class, 'sitemap'])->name('sitemap');
+Route::get('/llms.txt', [PublicPageController::class, 'llms'])->name('llms');
 Route::get('/google-site-verification.html', [PublicPageController::class, 'verification'])->name('google.verification');
 
 Route::get('/dashboard', function () {

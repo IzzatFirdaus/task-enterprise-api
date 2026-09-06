@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('title', $task->title)
-@section('description', 'View details and delivery metadata for the personal task '.$task->title.'.')
+@section('description', 'View details for the personal task '.$task->title.'.')
 
 @section('content')
-    <div class="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
         <div class="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
             <div>
                 <a href="{{ route('tasks.index') }}" class="text-sm font-semibold text-cyan-700 hover:underline dark:text-cyan-400">&larr; Back to tasks</a>
@@ -12,8 +12,8 @@
                 <h1 class="mt-2 break-words text-3xl font-bold tracking-tight text-slate-950 dark:text-white">{{ $task->title }}</h1>
             </div>
             <div class="flex flex-wrap gap-3">
-                <a href="{{ route('tasks.edit', $task) }}" class="inline-flex min-h-11 items-center justify-center rounded-xl bg-cyan-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-cyan-800 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 dark:bg-cyan-600 dark:hover:bg-cyan-500 dark:focus:ring-offset-slate-900">Edit task</a>
-                <a href="{{ route('tasks.create') }}" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 dark:focus:ring-offset-slate-900">Create task</a>
+                <a href="{{ route('tasks.edit', $task) }}" class="inline-flex min-h-11 items-center justify-center rounded-md bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white transition-colors duration-150 hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 dark:bg-teal-600 dark:hover:bg-teal-500 dark:focus:ring-offset-slate-950">Edit task</a>
+                <a href="{{ route('tasks.create') }}" class="inline-flex min-h-11 items-center justify-center rounded-md border border-slate-400 bg-transparent px-4 py-2.5 text-sm font-semibold text-slate-700 transition-colors duration-150 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800 dark:focus:ring-offset-slate-950">Create task</a>
             </div>
         </div>
 
@@ -30,7 +30,7 @@
                 @if ($task->description)
                     <p class="mt-3 whitespace-pre-wrap text-base leading-7 text-slate-700 dark:text-slate-300">{{ $task->description }}</p>
                 @else
-                    <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">No description was added to this task.</p>
+                    <p class="mt-3 text-sm text-slate-500 dark:text-slate-400">No description.</p>
                 @endif
             </div>
             <dl class="mt-8 grid gap-5 border-t border-slate-100 pt-6 dark:border-slate-700 sm:grid-cols-2">

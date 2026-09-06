@@ -1,8 +1,17 @@
 User-agent: *
 Allow: /
+Allow: /about
+Allow: /capabilities
+Allow: /blog
+Allow: /faq
+Allow: /terms
+Allow: /privacy
 Disallow: /dashboard
 Disallow: /profile
 Disallow: /admin/
 Disallow: /api/
+Disallow: /tasks
+Disallow: /password
+Disallow: /register
 
 Sitemap: /sitemap.xml

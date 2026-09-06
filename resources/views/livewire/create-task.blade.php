@@ -1,7 +1,7 @@
 <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm">
     <div class="mb-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
         <h3 class="text-base font-semibold text-slate-900 dark:text-slate-100">Create New Task</h3>
-        <span class="text-xs text-slate-400 dark:text-slate-500">Personal Workload</span>
+        <span class="text-xs text-slate-400 dark:text-slate-500">Your workspace</span>
     </div>
 
     <form wire:submit="save" class="space-y-4">
@@ -31,7 +31,7 @@
                 id="create_description"
                 wire:model="description"
                 rows="3"
-                placeholder="Add operational notes or acceptance criteria..."
+                placeholder="Add notes or acceptance criteria."
                 class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-xs focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20"
             ></textarea>
             @error('description')

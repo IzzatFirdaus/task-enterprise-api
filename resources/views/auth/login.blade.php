@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-6 text-center">
         <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Sign in to your account</h1>
-        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Access your tasks, deliverables, and workspace.</p>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Access your tasks and workspace.</p>
     </div>
 
     <!-- Session Status -->
@@ -59,6 +59,12 @@
                 <a class="inline-flex min-h-11 items-center font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ml-1" href="{{ route('admin.login') }}">
                     Enterprise Admin Login &rarr;
                 </a>
+            </p>
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+                By signing in, you agree to our
+                <a href="{{ route('terms') }}" class="font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ml-1">Terms of Service</a>
+                and
+                <a href="{{ route('privacy') }}" class="font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ml-1">Privacy Policy</a>.
             </p>
         </div>
     </form>

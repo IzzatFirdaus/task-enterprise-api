@@ -2,15 +2,11 @@
 
 @section('content')
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm sm:flex-row sm:items-center">
+        <div class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
             <div>
-                <div class="inline-flex items-center gap-2 rounded-full bg-purple-50 dark:bg-purple-950/60 px-3 py-1 text-xs font-semibold text-purple-800 dark:text-purple-300 ring-1 ring-inset ring-purple-700/10 dark:ring-purple-500/20 mb-1">
-                    <span class="h-1.5 w-1.5 rounded-full bg-purple-600 dark:bg-purple-400"></span>
-                    Super Admin Security Control
-                </div>
-                <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-950 dark:text-white">System Configuration</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Configure global parameters, operational boundaries, and system availability states.</p>
+                <p class="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-teal-700 dark:text-teal-300">Administration / configuration</p>
+                <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">System settings</h1>
+                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Update site identity, contact, and availability settings.</p>
             </div>
         </div>
 
@@ -22,7 +18,7 @@
             <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">Application Identity</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Global site naming and system administrative routing.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Site name and admin contact email.</p>
                 </div>
 
                 <div class="grid gap-6 md:grid-cols-2">
@@ -59,8 +55,8 @@
             <!-- Section 2: Operational Controls -->
             <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
-                    <h2 class="text-base font-semibold text-slate-900 dark:text-white">Operational Guardrails</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Maintenance mode control and user registration volume ceilings.</p>
+                    <h2 class="text-base font-semibold text-slate-900 dark:text-white">Operational Controls</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Maintenance mode and user registration limits.</p>
                 </div>
 
                 <div class="grid gap-6 md:grid-cols-2">
@@ -70,8 +66,8 @@
                             name="maintenance_mode"
                             class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20"
                         >
-                            <option value="0" {{ old('maintenance_mode', config('app.env') !== 'production' ? '0' : '1') === '0' ? 'selected' : '' }}>Off (Normal Availability)</option>
-                            <option value="1" {{ old('maintenance_mode', config('app.env') === 'production' ? '1' : '0') === '1' ? 'selected' : '' }}>On (Restricted Access)</option>
+                            <option value="0" {{ old('maintenance_mode', config('app.env') !== 'production' ? '0' : '1') === '0' ? 'selected' : '' }}>Off</option>
+                            <option value="1" {{ old('maintenance_mode', config('app.env') === 'production' ? '1' : '0') === '1' ? 'selected' : '' }}>On</option>
                         </select>
                         @error('maintenance_mode')
                             <p class="text-xs font-medium text-rose-600 dark:text-rose-400" role="alert">{{ $message }}</p>
@@ -99,7 +95,7 @@
                     type="submit"
                     class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 dark:bg-cyan-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-cyan-700 dark:hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
                 >
-                    Save System Settings
+                    Save settings
                 </button>
             </div>
         </form>

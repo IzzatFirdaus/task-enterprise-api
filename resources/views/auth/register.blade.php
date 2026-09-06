@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-6 text-center">
         <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Create your account</h1>
-        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Get started managing tasks and team operations.</p>
+        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Create your account to get started.</p>
     </div>
 
     <form method="POST" action="{{ route('register') }}" class="space-y-4">
@@ -35,6 +35,12 @@
             <x-input-error id="password-confirmation-error" :messages="$errors->get('password_confirmation')" />
         </div>
 
+        <!-- Consent -->
+        <div class="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
+            <input id="consent" type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 rounded border-slate-300 text-cyan-700 focus:ring-cyan-500 dark:border-slate-600 dark:bg-slate-800" aria-describedby="consent-label" />
+            <label id="consent-label" for="consent">I agree to the <a href="{{ route('terms') }}" class="underline hover:text-cyan-700">Terms of Service</a> and <a href="{{ route('privacy') }}" class="underline hover:text-cyan-700">Privacy Policy</a>, and consent to processing of my personal data.</label>
+        </div>
+
         <!-- Submit Button -->
         <div class="pt-2">
             <x-primary-button class="w-full justify-center">
@@ -43,12 +49,18 @@
         </div>
 
         <!-- Already Registered -->
-        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center">
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center space-y-2">
             <p class="text-xs text-slate-500 dark:text-slate-400">
                 Already registered?
                 <a class="inline-flex min-h-11 items-center font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 ml-1" href="{{ route('login') }}">
                     Sign in to your account &rarr;
                 </a>
+            </p>
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+                By creating an account, you agree to our
+                <a href="{{ route('terms') }}" class="font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ml-1">Terms of Service</a>
+                and
+                <a href="{{ route('privacy') }}" class="font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white ml-1">Privacy Policy</a>.
             </p>
         </div>
     </form>

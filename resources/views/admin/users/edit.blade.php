@@ -27,7 +27,7 @@
             <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">User Identity</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Core identity and contact information.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Name and email address.</p>
                 </div>
 
                 <div class="grid gap-6 md:grid-cols-2">
@@ -65,7 +65,7 @@
             <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">Role Permissions</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Assign role access levels and capability policies.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Assign roles to this user.</p>
                 </div>
 
                 <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
@@ -97,7 +97,7 @@
             <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">Account Access Status</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Temporarily suspend account access or restore active standing.</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Suspend or restore this account.</p>
                 </div>
 
                 <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-900/60 p-4 space-y-3">
@@ -118,7 +118,7 @@
                             name="suspension_reason"
                             rows="2"
                             class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-xs focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20"
-                            placeholder="Provide administrative notes for this suspension..."
+                            placeholder="Reason for suspension (optional)"
                         >{{ old('suspension_reason', $user->suspension_reason) }}</textarea>
                         @error('suspension_reason')
                             <p class="text-xs font-medium text-rose-600 dark:text-rose-400" role="alert">{{ $message }}</p>

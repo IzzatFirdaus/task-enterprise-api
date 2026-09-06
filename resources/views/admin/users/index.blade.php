@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm sm:flex-row sm:items-center">
+        <div class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-950 dark:text-white">User Management</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Search, inspect roles, and administer system access permissions.</p>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-teal-700 dark:text-teal-300">Administration / access</p>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Manage users</h1>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Search accounts, review roles, and change access status.</p>
             </div>
             <div class="inline-flex items-center gap-2 rounded-xl bg-slate-50 dark:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                 Total Users: <span class="font-bold text-slate-900 dark:text-white">{{ $users->total() }}</span>
@@ -104,7 +104,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="py-12 text-center text-xs text-slate-500 dark:text-slate-400">
-                                    No user accounts found.
+                                    No users found.
                                 </td>
                             </tr>
                         @endforelse

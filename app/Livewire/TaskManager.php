@@ -62,13 +62,20 @@ class TaskManager extends Component
 
     public function render()
     {
+        $stats = $this->tasks()
+            ->selectRaw(
+                'COUNT(*) as total, SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as pending, SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as in_progress, SUM(CASE WHEN status = ? THEN 1 ELSE 0 END) as completed',
+                ['pending', 'in_progress', 'completed'],
+            )
+            ->first();
+
         return view('livewire.task-manager', [
             'tasks' => $this->tasks()->latest()->get(),
             'counts' => [
-                'all' => $this->tasks()->count(),
-                'pending' => $this->tasks()->where('status', 'pending')->count(),
-                'in_progress' => $this->tasks()->where('status', 'in_progress')->count(),
-                'completed' => $this->tasks()->where('status', 'completed')->count(),
+                'all' => (int) ($stats->total ?? 0),
+                'pending' => (int) ($stats->pending ?? 0),
+                'in_progress' => (int) ($stats->in_progress ?? 0),
+                'completed' => (int) ($stats->completed ?? 0),
             ],
         ]);
     }

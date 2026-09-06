@@ -8,7 +8,7 @@
         >
             <!-- Backdrop -->
             <div
-                class="fixed inset-0 bg-slate-950/60 backdrop-blur-xs transition-opacity"
+                class="fixed inset-0 bg-slate-950/60 transition-opacity"
                 wire:click="close"
                 aria-hidden="true"
             ></div>
@@ -16,14 +16,14 @@
             <!-- Modal Container -->
             <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
                 <div
-                    class="relative transform overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg"
+                    class="relative transform overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-left shadow-lg transition-all sm:my-8 sm:w-full sm:max-w-lg"
                     @keydown.escape.window="$wire.close()"
                 >
                     <!-- Header -->
                     <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 px-6 py-4">
                         <div>
-                            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100" id="modal-title">Edit Task Deliverable</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400">Update parameters, scope, or lifecycle stage.</p>
+                            <h3 class="text-base font-bold text-slate-900 dark:text-slate-100" id="modal-title">Edit task</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Update the task details below.</p>
                         </div>
                         <button
                             type="button"
@@ -74,7 +74,7 @@
                         <!-- Status Select -->
                         <div class="space-y-1.5">
                             <label for="edit_status" class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">
-                                Lifecycle Status
+                                Status
                             </label>
                             <select
                                 id="edit_status"

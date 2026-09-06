@@ -1,16 +1,11 @@
-<div class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-    <div class="mb-8 flex flex-col justify-between gap-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm sm:flex-row sm:items-center sm:p-8">
+<div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div class="mb-10 flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
         <div>
-            <div class="inline-flex items-center gap-2 rounded-full bg-cyan-50 dark:bg-cyan-950/60 px-3 py-1 text-xs font-semibold text-cyan-800 dark:text-cyan-400 ring-1 ring-inset ring-cyan-700/10 dark:ring-cyan-500/20">
-                <span class="h-1.5 w-1.5 rounded-full bg-cyan-600 dark:bg-cyan-400"></span>
-                Operations Workspace
-            </div>
-            <h1 class="mt-2 text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Task Command Center</h1>
-            <p class="mt-1 text-sm text-slate-500 dark:text-slate-400 max-w-xl">Keep delivery moving with real-time tracking of active deliverables.</p>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-teal-700 dark:text-teal-300">Personal work queue</p>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-4xl">Review your tasks</h1>
+            <p class="mt-2 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300">Manage tasks in your workspace.</p>
         </div>
-        <div class="inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400">
-            <span>{{ now()->format('D, M j, Y') }}</span>
-        </div>
+        <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ now()->format('D, M j, Y') }}</p>
     </div>
 
     @if (session('success'))
@@ -24,7 +19,7 @@
 
     <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         @foreach ([['label' => 'Total tasks', 'value' => $counts['all'], 'color' => 'text-slate-950 dark:text-white'], ['label' => 'Pending', 'value' => $counts['pending'], 'color' => 'text-amber-700 dark:text-amber-400'], ['label' => 'In progress', 'value' => $counts['in_progress'], 'color' => 'text-cyan-700 dark:text-cyan-400'], ['label' => 'Completed', 'value' => $counts['completed'], 'color' => 'text-emerald-700 dark:text-emerald-400']] as $stat)
-            <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-5 shadow-xs transition hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-md">
+            <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-5">
                 <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">{{ $stat['label'] }}</p>
                 <p class="mt-2 text-3xl font-bold tracking-tight {{ $stat['color'] }}">{{ $stat['value'] }}</p>
             </div>
@@ -70,7 +65,25 @@
                 </div>
                 <span class="text-xs font-medium text-slate-500 dark:text-slate-400">{{ $counts['all'] }} total</span>
             </div>
-            <div class="divide-y divide-slate-100 dark:divide-slate-700">
+            <div class="divide-y divide-slate-100 dark:divide-slate-700" wire:loading.class="opacity-50" aria-busy="true" aria-label="Loading tasks">
+                <div wire:loading class="animate-pulse space-y-4 py-4">
+                    @foreach (range(1, 3) as $i)
+                        <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                            <div class="min-w-0 flex-1 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-8 w-8 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+                                    <div class="h-4 w-48 rounded bg-slate-200 dark:bg-slate-700"></div>
+                                </div>
+                                <div class="h-3 w-72 rounded bg-slate-200 dark:bg-slate-700"></div>
+                                <div class="h-3 w-32 rounded bg-slate-200 dark:bg-slate-700"></div>
+                            </div>
+                            <div class="flex shrink-0 gap-1.5">
+                                <div class="h-7 w-16 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
+                                <div class="h-7 w-16 rounded-lg bg-slate-200 dark:bg-slate-700"></div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
                 @forelse ($tasks as $task)
                     <article wire:key="task-{{ $task->id }}" class="flex flex-col gap-4 py-4 sm:flex-row sm:items-start sm:justify-between">
                         <div class="min-w-0">
@@ -89,7 +102,7 @@
                 @empty
                     <div class="py-12 text-center">
                         <p class="font-medium text-sm text-slate-900 dark:text-slate-100">No tasks yet</p>
-                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Create your first task to start tracking delivery.</p>
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Create your first task to get started.</p>
                     </div>
                 @endforelse
             </div>

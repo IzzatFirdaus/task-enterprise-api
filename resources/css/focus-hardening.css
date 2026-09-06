@@ -1,0 +1,5 @@
+
+/* Global accessibility focus ring */
+:focus-visible { outline: 3px solid rgb(8 145 178 / 0.5); outline-offset: 2px; border-radius: 0.25rem; }
+
+button, a[href], input[type="submit"], input[type="button"] { min-height: 44px; min-width: 44px; }

@@ -17,7 +17,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="robots" content="noindex,nofollow">
+        <meta name="robots" content="index,follow">
         <link rel="canonical" href="{{ request()->url() }}">
         <meta name="description" content="@yield('description', $pageDescription)">
         <title>@yield('title', $pageTitle) | {{ config('app.name', 'Enterprise Tasks') }}</title>
@@ -30,7 +30,7 @@
             <meta name="google-site-verification" content="{{ config('app.seo.google_verification') }}">
         @endif
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=public-sans:400,500,600,700&display=swap" rel="stylesheet" />
         <script>
             (function() {
                 const stored = localStorage.getItem('theme');
@@ -43,14 +43,17 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
-    <body class="flex min-h-full flex-col font-sans text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 antialiased selection:bg-cyan-500 selection:text-white" x-data="{ mobileMenuOpen: false }">
+    <body class="app-shell flex min-h-full flex-col font-sans text-slate-900 dark:text-slate-100 antialiased selection:bg-teal-700 selection:text-white" x-data="{ mobileMenuOpen: false }">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-cyan-700 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            Skip to main content
+        </a>
         <!-- Top Navigation -->
-        <header class="sticky top-0 z-40 border-b border-slate-200/80 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md">
+        <header class="sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
                 <div class="flex items-center gap-6">
                     <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 rounded-lg" aria-label="Enterprise Tasks Dashboard">
-                        <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500 text-xs font-bold text-white">ET</span>
-                        <span class="flex flex-col"><span class="text-sm font-semibold leading-none text-slate-900 dark:text-white">Enterprise Tasks</span><span class="mt-1 text-[10px] leading-none text-slate-500 dark:text-slate-400">Operational clarity</span></span>
+                        <span class="flex h-8 w-8 items-center justify-center rounded-md bg-teal-700 text-xs font-bold text-white">ET</span>
+                        <span class="flex flex-col"><span class="text-sm font-semibold leading-none text-slate-900 dark:text-white">Enterprise Tasks</span><span class="mt-1 text-[10px] leading-none text-slate-500 dark:text-slate-400">Personal work queue</span></span>
                     </a>
                 </div>
 

@@ -38,7 +38,7 @@
             <meta name="google-site-verification" content="{{ config('app.seo.google_verification') }}">
         @endif
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=public-sans:400,500,600,700&display=swap" rel="stylesheet" />
         <script>
             (function() {
                 const stored = localStorage.getItem('theme');
@@ -62,7 +62,10 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @livewireStyles
     </head>
-    <body class="flex min-h-full max-w-full flex-col overflow-x-hidden font-sans text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 antialiased selection:bg-cyan-500 selection:text-white" x-data="{ sidebarOpen: false }">
+    <body class="admin-shell flex min-h-full max-w-full flex-col overflow-x-hidden font-sans text-slate-900 dark:text-slate-100 antialiased selection:bg-teal-700 selection:text-white" x-data="{ sidebarOpen: false }">
+        <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded-lg focus:bg-cyan-700 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-cyan-400">
+            Skip to main content
+        </a>
         <!-- Admin Top Navigation -->
         <header class="sticky top-0 z-40 border-b border-slate-800 bg-slate-950 text-white">
             <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3.5 sm:px-6 lg:px-8">
@@ -82,14 +85,10 @@
                     </button>
 
                     <a href="{{ url('/') }}" class="flex items-center gap-2.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-600 text-white shadow-sm font-bold text-sm">
-                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                            </svg>
-                        </div>
+                        <div class="flex h-8 w-8 items-center justify-center rounded-md bg-teal-700 text-white font-bold text-xs">EA</div>
                         <div class="flex flex-col">
                             <span class="text-sm font-bold tracking-tight text-white">ENTERPRISE ADMIN</span>
-                            <span class="text-[9px] font-semibold uppercase tracking-widest text-cyan-400">Management Suite</span>
+                            <span class="text-[9px] font-semibold uppercase tracking-widest text-teal-300">Access control</span>
                         </div>
                     </a>
                 </div>
@@ -122,7 +121,7 @@
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-rose-950 hover:text-rose-200 hover:border-rose-800 border border-slate-700">
+                        <button type="submit" class="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-rose-950 hover:text-rose-200 hover:border-rose-800 border border-slate-700" aria-label="Log out of admin panel">
                             Log out
                         </button>
                     </form>
@@ -250,7 +249,7 @@
             x-transition:leave="transition-opacity ease-linear duration-200"
             x-transition:leave-start="opacity-100"
             x-transition:leave-end="opacity-0"
-            class="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-sm lg:hidden"
+            class="fixed inset-0 z-50 bg-slate-950/60 lg:hidden"
             @click="sidebarOpen = false"
         ></div>
 
@@ -276,7 +275,7 @@
                         </div>
                         <span class="font-bold text-slate-900 dark:text-white">Admin Navigation</span>
                     </div>
-                    <button type="button" @click="sidebarOpen = false" class="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200">
+                    <button type="button" @click="sidebarOpen = false" aria-label="Close navigation menu" class="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200">
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>

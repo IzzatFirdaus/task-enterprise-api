@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm sm:flex-row sm:items-center">
+        <div class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-950 dark:text-white">Task Moderation</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Audit system-wide workload, review ownership, and manage task lifecycle states.</p>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-teal-700 dark:text-teal-300">Administration / tasks</p>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Moderate tasks</h1>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Review and manage tasks across all accounts.</p>
             </div>
             <div class="inline-flex items-center gap-2 rounded-xl bg-slate-50 dark:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                 Total Moderated Tasks: <span class="font-bold text-slate-900 dark:text-white">{{ $tasks->total() }}</span>
@@ -20,9 +20,9 @@
                     <thead>
                         <tr class="border-b border-slate-100 dark:border-slate-700 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                             <th scope="col" class="pb-3 pr-4">Owner</th>
-                            <th scope="col" class="pb-3 px-4">Task Deliverable</th>
-                            <th scope="col" class="pb-3 px-4">Lifecycle Status</th>
-                            <th scope="col" class="pb-3 px-4">Created Date</th>
+                            <th scope="col" class="pb-3 px-4">Task</th>
+                            <th scope="col" class="pb-3 px-4">Status</th>
+                            <th scope="col" class="pb-3 px-4">Created</th>
                             <th scope="col" class="pb-3 pl-4 text-right">Actions</th>
                         </tr>
                     </thead>

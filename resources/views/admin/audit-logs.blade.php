@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col justify-between gap-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm sm:flex-row sm:items-center">
+        <div class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
             <div>
-                <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-950 dark:text-white">Administrative Audit Trails</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Immutable record of security events, privilege updates, and account actions.</p>
+            <p class="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-teal-700 dark:text-teal-300">Administration / history</p>
+            <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Audit log</h1>
+            <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Review recorded administrative actions.</p>
             </div>
             <a
                 href="{{ route('admin.audit-logs.export') }}"
@@ -25,12 +25,12 @@
                 <table class="w-full text-left text-sm">
                     <thead>
                         <tr class="border-b border-slate-100 dark:border-slate-700 text-[11px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-                            <th scope="col" class="pb-3 pr-4">Administrator</th>
-                            <th scope="col" class="pb-3 px-4">Event Action</th>
-                            <th scope="col" class="pb-3 px-4">Target Entity</th>
-                            <th scope="col" class="pb-3 px-4">Origin IP</th>
-                            <th scope="col" class="pb-3 px-4">Payload / Changes</th>
-                            <th scope="col" class="pb-3 pl-4 text-right">Timestamp</th>
+                            <th scope="col" class="pb-3 pr-4">Admin</th>
+                            <th scope="col" class="pb-3 px-4">Action</th>
+                            <th scope="col" class="pb-3 px-4">Target</th>
+                            <th scope="col" class="pb-3 px-4">IP</th>
+                            <th scope="col" class="pb-3 px-4">Changes</th>
+                            <th scope="col" class="pb-3 pl-4 text-right">Time</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
@@ -69,12 +69,12 @@
                                     @if (!empty($log->changes))
                                         <details class="group/details cursor-pointer">
                                             <summary class="text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 focus:outline-none">
-                                                View parameters
+                                                View changes
                                             </summary>
                                             <pre class="mt-1.5 max-w-xs overflow-x-auto rounded-lg bg-slate-950 p-2.5 text-[11px] font-mono text-emerald-400 shadow-inner sm:max-w-sm">{{ json_encode($log->changes, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}</pre>
                                         </details>
                                     @else
-                                        <span class="text-slate-400 dark:text-slate-500">—</span>
+                                        <span class="text-slate-500 dark:text-slate-400">None</span>
                                     @endif
                                 </td>
 
@@ -86,7 +86,7 @@
                         @empty
                             <tr>
                                 <td colspan="6" class="py-12 text-center text-xs text-slate-500 dark:text-slate-400">
-                                    No audit entries match the current history.
+                                    No audit entries found.
                                 </td>
                             </tr>
                         @endforelse

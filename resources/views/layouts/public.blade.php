@@ -42,8 +42,8 @@
         </script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="min-h-full bg-slate-50 font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
-        <a href="#main-content" class="skip-link">Skip to content</a>
+    <body class="min-h-full overflow-x-hidden bg-slate-50 font-sans text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+        <a href="#main-content" class="skip-link focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2">Skip to main content</a>
         <header class="border-b border-slate-200 bg-white/95 dark:border-slate-800 dark:bg-slate-950/95">
             <nav class="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-5" aria-label="Public navigation">
                 <a href="{{ route('guest') }}" class="flex items-center gap-3 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400" aria-label="Enterprise Tasks home">
@@ -52,6 +52,7 @@
                 </a>
                 <div class="hidden items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 sm:flex">
                     <a href="{{ route('capabilities') }}" class="rounded-lg px-3 py-1.5 transition {{ request()->routeIs('capabilities*') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'hover:text-cyan-700 dark:hover:text-cyan-300' }}">Capabilities</a>
+                    <a href="{{ route('faq') }}" class="rounded-lg px-3 py-1.5 transition {{ request()->routeIs('faq') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'hover:text-cyan-700 dark:hover:text-cyan-300' }}">FAQ</a>
                     <a href="{{ route('blog.index') }}" class="rounded-lg px-3 py-1.5 transition {{ request()->routeIs('blog.*') ? 'bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-white' : 'hover:text-cyan-700 dark:hover:text-cyan-300' }}">Journal</a>
                     <button type="button" data-theme-toggle class="rounded-full border border-slate-200 px-3 py-1 text-xs hover:border-cyan-500 hover:text-slate-950 dark:border-slate-700 dark:hover:text-white" aria-label="Switch theme">Theme</button>
                     @auth
@@ -73,6 +74,7 @@
                     </summary>
                     <div class="absolute right-0 top-14 z-50 w-48 rounded-lg border border-slate-200 bg-white p-2 text-sm font-semibold text-slate-700 shadow-xl dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200">
                         <a href="{{ route('capabilities') }}" class="block rounded-md px-3 py-2.5 hover:bg-slate-100 hover:text-cyan-700 dark:hover:bg-slate-800 dark:hover:text-cyan-300">Capabilities</a>
+                        <a href="{{ route('faq') }}" class="block rounded-md px-3 py-2.5 hover:bg-slate-100 hover:text-cyan-700 dark:hover:bg-slate-800 dark:hover:text-cyan-300">FAQ</a>
                         <a href="{{ route('blog.index') }}" class="block rounded-md px-3 py-2.5 hover:bg-slate-100 hover:text-cyan-700 dark:hover:bg-slate-800 dark:hover:text-cyan-300">Journal</a>
                         <button type="button" data-theme-toggle class="block w-full rounded-md px-3 py-2.5 text-left hover:bg-slate-100 hover:text-cyan-700 dark:hover:bg-slate-800 dark:hover:text-cyan-300" aria-label="Switch theme">Theme</button>
                         @auth
@@ -92,7 +94,16 @@
         <footer class="border-t border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
             <div class="mx-auto flex max-w-6xl flex-col gap-4 px-5 py-8 text-sm text-slate-600 dark:text-slate-400 sm:flex-row sm:items-center sm:justify-between">
                 <p>&copy; {{ date('Y') }} Enterprise Tasks. Built for focused work.</p>
-                <div class="flex flex-wrap gap-4"><a href="{{ route('about') }}" class="hover:text-white">About</a><a href="{{ route('terms') }}" class="hover:text-white">Terms</a><a href="mailto:{{ config('app.seo.contact_email') }}" class="hover:text-cyan-300">{{ config('app.seo.contact_email') }}</a></div>
+                <div class="flex flex-wrap gap-4">
+                    <a href="{{ route('about') }}" class="hover:text-white dark:hover:text-cyan-300">About</a>
+                    <a href="{{ route('faq') }}" class="hover:text-white dark:hover:text-cyan-300">FAQ</a>
+                    <a href="{{ route('terms') }}" class="hover:text-white dark:hover:text-cyan-300">Terms</a>
+                    <a href="{{ route('privacy') }}" class="hover:text-white dark:hover:text-cyan-300">Privacy</a>
+                    <a href="mailto:{{ config('app.seo.contact_email') }}" class="hover:text-cyan-300">{{ config('app.seo.contact_email') }}</a>
+                    @if (config('app.seo.contact_phone'))
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', config('app.seo.contact_phone')) }}" class="hover:text-cyan-300">{{ config('app.seo.contact_phone') }}</a>
+                    @endif
+                </div>
             </div>
         </footer>
         <x-site-enhancements />

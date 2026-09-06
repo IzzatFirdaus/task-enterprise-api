@@ -36,5 +36,14 @@
                 {{ __('Reset Password') }}
             </x-primary-button>
         </div>
+
+        <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center">
+            <p class="text-xs text-slate-400 dark:text-slate-500">
+                By resetting your password, you agree to our
+                <a href="{{ route('terms') }}" class="font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">Terms of Service</a>
+                and
+                <a href="{{ route('privacy') }}" class="font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white">Privacy Policy</a>.
+            </p>
+        </div>
     </form>
 </x-guest-layout>
