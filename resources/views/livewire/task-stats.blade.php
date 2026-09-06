@@ -1,45 +1,53 @@
-<section class="grid border-y border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900 sm:grid-cols-2 lg:grid-cols-4" wire:key="task-stats-{{ $refreshToken }}" aria-label="Task status summary">
-    <!-- Total Tasks -->
-    <div class="border-b border-slate-200 p-5 dark:border-slate-700 sm:border-r lg:border-b-0">
-        <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total Tasks</span>
-        </div>
-        <div class="mt-4 flex items-baseline gap-2">
-            <span class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">{{ $stats['total'] }}</span>
-            <span class="text-xs text-slate-400 dark:text-slate-500">tasks</span>
-        </div>
+<div wire:key="task-stats-{{ $refreshToken }}">
+    <!-- Loading Skeleton during async poll/refresh -->
+    <div wire:loading.block wire:target="$refresh,refreshToken" class="py-1">
+        <x-skeleton-loader type="stats" label="Updating statistics..." />
     </div>
 
-    <!-- Pending Tasks -->
-    <div class="border-b border-slate-200 p-5 dark:border-slate-700 sm:border-r lg:border-b-0">
-        <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400">Pending</span>
+    <!-- Active Stats Grid -->
+    <section wire:loading.remove wire:target="$refresh,refreshToken" class="grid divide-y divide-slate-200 dark:divide-slate-800 border-y border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sm:grid-cols-2 sm:divide-y-0 sm:divide-x lg:grid-cols-4" aria-label="Task status summary">
+        <!-- Total Tasks -->
+        <div class="p-5 sm:p-6">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Total Tasks</span>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">{{ $stats['total'] }}</span>
+                <span class="text-xs font-medium text-slate-600 dark:text-slate-400">tasks</span>
+            </div>
         </div>
-        <div class="mt-4 flex items-baseline gap-2">
-            <span class="text-3xl font-bold tracking-tight text-amber-700 dark:text-amber-400">{{ $stats['pending'] }}</span>
-            <span class="text-xs text-amber-700 dark:text-amber-500">not started</span>
-        </div>
-    </div>
 
-    <!-- In Progress Tasks -->
-    <div class="border-b border-slate-200 p-5 dark:border-slate-700 lg:border-r lg:border-b-0">
-        <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold uppercase tracking-wider text-cyan-700 dark:text-cyan-400">In Progress</span>
+        <!-- Pending Tasks -->
+        <div class="p-5 sm:p-6">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-amber-800 dark:text-amber-400">Pending</span>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-3xl font-bold tracking-tight text-amber-800 dark:text-amber-400">{{ $stats['pending'] }}</span>
+                <span class="text-xs font-medium text-amber-800 dark:text-amber-400">not started</span>
+            </div>
         </div>
-        <div class="mt-4 flex items-baseline gap-2">
-            <span class="text-3xl font-bold tracking-tight text-cyan-700 dark:text-cyan-400">{{ $stats['in_progress'] }}</span>
-            <span class="text-xs text-cyan-700 dark:text-cyan-500">in progress</span>
-        </div>
-    </div>
 
-    <!-- Completed Tasks -->
-    <div class="p-5">
-        <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Completed</span>
+        <!-- In Progress Tasks -->
+        <div class="p-5 sm:p-6">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-teal-800 dark:text-teal-400">In Progress</span>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-3xl font-bold tracking-tight text-teal-800 dark:text-teal-400">{{ $stats['in_progress'] }}</span>
+                <span class="text-xs font-medium text-teal-800 dark:text-teal-400">active</span>
+            </div>
         </div>
-        <div class="mt-4 flex items-baseline gap-2">
-            <span class="text-3xl font-bold tracking-tight text-emerald-700 dark:text-emerald-400">{{ $stats['completed'] }}</span>
-            <span class="text-xs text-emerald-700 dark:text-emerald-500">completed</span>
+
+        <!-- Completed Tasks -->
+        <div class="p-5 sm:p-6">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-800 dark:text-emerald-400">Completed</span>
+            </div>
+            <div class="mt-3 flex items-baseline gap-2">
+                <span class="text-3xl font-bold tracking-tight text-emerald-800 dark:text-emerald-400">{{ $stats['completed'] }}</span>
+                <span class="text-xs font-medium text-emerald-800 dark:text-emerald-400">completed</span>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>

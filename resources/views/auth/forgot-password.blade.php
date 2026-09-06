@@ -26,7 +26,7 @@
         </div>
 
         <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center">
-            <a href="{{ route('login') }}" class="inline-flex min-h-11 items-center text-xs font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500">
+            <a href="{{ route('login') }}" class="inline-flex min-h-11 items-center text-xs font-semibold text-teal-700 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
                 &larr; Back to sign in
             </a>
         </div>

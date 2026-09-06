@@ -37,8 +37,8 @@
 
         <!-- Consent -->
         <div class="flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400">
-            <input id="consent" type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 rounded border-slate-300 text-cyan-700 focus:ring-cyan-500 dark:border-slate-600 dark:bg-slate-800" aria-describedby="consent-label" />
-            <label id="consent-label" for="consent">I agree to the <a href="{{ route('terms') }}" class="underline hover:text-cyan-700">Terms of Service</a> and <a href="{{ route('privacy') }}" class="underline hover:text-cyan-700">Privacy Policy</a>, and consent to processing of my personal data.</label>
+            <input id="consent" type="checkbox" name="consent" required class="mt-0.5 h-4 w-4 rounded border-slate-300 text-teal-700 focus:ring-teal-500 dark:border-slate-600 dark:bg-slate-800" aria-describedby="consent-label" />
+            <label id="consent-label" for="consent">I agree to the <a href="{{ route('terms') }}" class="underline hover:text-teal-700">Terms of Service</a> and <a href="{{ route('privacy') }}" class="underline hover:text-teal-700">Privacy Policy</a>, and consent to processing of my personal data.</label>
         </div>
 
         <!-- Submit Button -->
@@ -52,8 +52,8 @@
         <div class="border-t border-slate-100 dark:border-slate-700 pt-4 text-center space-y-2">
             <p class="text-xs text-slate-500 dark:text-slate-400">
                 Already registered?
-                <a class="inline-flex min-h-11 items-center font-semibold text-cyan-700 dark:text-cyan-400 hover:text-cyan-800 dark:hover:text-cyan-300 ml-1" href="{{ route('login') }}">
-                    Sign in to your account &rarr;
+                <a class="inline-flex min-h-11 items-center font-semibold text-teal-700 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-200 ml-1" href="{{ route('login') }}">
+                    Sign in to your account
                 </a>
             </p>
             <p class="text-xs text-slate-400 dark:text-slate-500">

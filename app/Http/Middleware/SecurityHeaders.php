@@ -49,9 +49,9 @@ class SecurityHeaders
         $cspParts = [
             "default-src $self",
             "script-src $self".($nonce ? " 'nonce-$nonce'" : ''),
-            "style-src $self 'unsafe-inline'",
+            "style-src $self 'unsafe-inline' https://fonts.bunny.net",
             "img-src $self data:",
-            "font-src $self",
+            "font-src $self https://fonts.bunny.net",
             "connect-src $self",
             "frame-ancestors 'none'",
             "form-action $self",

@@ -1,5 +1,3 @@
-<a href="#main-content" class="skip-link">Skip to content</a>
-
 <div id="scroll-progress" class="scroll-progress" role="progressbar" aria-label="Page reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
 
 <button type="button" class="search-launch" data-search-open aria-label="Search this page" title="Search this page (Ctrl K)">

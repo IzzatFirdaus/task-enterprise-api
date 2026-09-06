@@ -1,6 +1,7 @@
 <div
     x-data="{
         isDark: @entangle('darkMode').live,
+        announcement: '',
         init() {
             this.isDark = document.documentElement.classList.contains('dark');
         },
@@ -8,19 +9,21 @@
             this.isDark = !this.isDark;
             document.documentElement.classList.toggle('dark', this.isDark);
             localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
-            // @entangle('.live') automatically syncs isDark to the server,
-            // which triggers updatedDarkMode() to persist the preference.
-            // Do NOT call $wire.toggle() here — it would double-flip the value.
+            this.announcement = this.isDark ? 'Dark theme enabled' : 'Light theme enabled';
+            window.dispatchEvent(new CustomEvent('theme-changed', { detail: { isDark: this.isDark } }));
         }
     }"
+    @theme-changed.window="isDark = $event.detail.isDark; document.documentElement.classList.toggle('dark', isDark);"
+    @storage.window="if ($event.key === 'theme') { isDark = $event.newValue === 'dark'; document.documentElement.classList.toggle('dark', isDark); }"
     class="inline-flex items-center"
 >
     <button
         type="button"
         @click="toggleTheme()"
-        class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-2.5 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 shadow-sm transition hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-500"
+        class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-full border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 shadow-xs transition hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-950 dark:hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 dark:focus-visible:ring-teal-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"
         :aria-label="isDark ? 'Switch to light theme' : 'Switch to dark theme'"
         :title="isDark ? 'Switch to light theme' : 'Switch to dark theme'"
+        aria-label="Switch theme"
     >
         <!-- Sun icon (shown in dark mode) -->
         <svg
@@ -40,7 +43,7 @@
         <!-- Moon icon (shown in light mode) -->
         <svg
             x-show="!isDark"
-            class="h-4 w-4 text-slate-500 dark:text-slate-300"
+            class="h-4 w-4 text-slate-700 dark:text-slate-300"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
@@ -51,7 +54,8 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
         </svg>
 
-        <span x-text="isDark ? 'Light' : 'Dark'" class="hidden sm:inline" aria-hidden="true"></span>
-        <span class="sr-only" x-text="isDark ? 'Switch to light mode' : 'Switch to dark mode'"></span>
+        <span x-text="isDark ? 'Light' : 'Dark'" class="hidden sm:inline font-semibold" aria-hidden="true"></span>
+        <span class="sr-only" x-text="isDark ? 'Switch to light theme' : 'Switch to dark theme'"></span>
     </button>
+    <div class="sr-only" role="status" aria-live="polite" x-text="announcement"></div>
 </div>

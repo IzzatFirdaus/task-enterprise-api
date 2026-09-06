@@ -1,5 +1,39 @@
 // Alpine.js is managed by Livewire v4 — do not import it here.
 
+const applyInitialTheme = () => {
+	const stored = localStorage.getItem('theme');
+	const userPrefValue = document.documentElement.dataset.userPref;
+	const userPref = userPrefValue === 'null' || userPrefValue === undefined ? null : userPrefValue === 'true';
+	const isDark = stored !== null
+		? stored === 'dark'
+		: userPref !== null
+			? userPref
+			: window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+	document.documentElement.classList.toggle('dark', isDark);
+};
+
+applyInitialTheme();
+
+window.addEventListener('storage', (event) => {
+	if (event.key === 'theme') {
+		applyInitialTheme();
+		syncThemeButtons();
+		window.dispatchEvent(new CustomEvent('theme-changed', { detail: { isDark: event.newValue === 'dark' } }));
+	}
+});
+
+try {
+	const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+	mediaQuery.addEventListener('change', () => {
+		if (localStorage.getItem('theme') === null) {
+			applyInitialTheme();
+			syncThemeButtons();
+			window.dispatchEvent(new CustomEvent('theme-changed', { detail: { isDark: document.documentElement.classList.contains('dark') } }));
+		}
+	});
+} catch (_) {}
+
 const escapeHtml = (value) => value.replace(/[&<>'"]/g, (character) => ({
 	'&': '&amp;',
 	'<': '&lt;',
@@ -60,8 +94,10 @@ const initEnhancements = () => {
 		const themeToggle = event.target.closest('[data-theme-toggle]');
 		if (themeToggle) {
 			document.documentElement.classList.toggle('dark');
-			localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+			const isDark = document.documentElement.classList.contains('dark');
+			localStorage.setItem('theme', isDark ? 'dark' : 'light');
 			syncThemeButtons();
+			window.dispatchEvent(new CustomEvent('theme-changed', { detail: { isDark } }));
 		}
 		const trigger = event.target.closest('[data-search-open]');
 		if (trigger && search) {
@@ -108,6 +144,16 @@ const initEnhancements = () => {
 	});
 
 	searchInput?.addEventListener('input', renderSearch);
+	document.querySelectorAll('form:not([wire\\:submit]):not([data-no-submit-lock])').forEach((form) => {
+		form.addEventListener('submit', () => {
+			form.setAttribute('aria-busy', 'true');
+			form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((button) => {
+				button.disabled = true;
+				button.dataset.submitLabel = button.textContent;
+				button.setAttribute('aria-label', 'Submitting');
+			});
+		});
+	});
 	document.addEventListener('keydown', (event) => {
 		if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
 			event.preventDefault();
@@ -212,19 +258,24 @@ const initEnhancements = () => {
 	});
 
 	let ticking = false;
-	let previousScrollY = window.scrollY;
+	let lastScrollY = window.scrollY;
+	const header = document.querySelector('header');
 	const updateScrollUi = () => {
+		const currentScrollY = window.scrollY;
 		const max = document.documentElement.scrollHeight - window.innerHeight;
-		const progress = max > 0 ? Math.min(100, (window.scrollY / max) * 100) : 0;
+		const progress = max > 0 ? Math.min(100, (currentScrollY / max) * 100) : 0;
 		const bar = document.querySelector('#scroll-progress');
 		if (bar) { bar.style.width = `${progress}%`; bar.setAttribute('aria-valuenow', String(Math.round(progress))); }
-		document.querySelector('#back-to-top')?.toggleAttribute('hidden', window.scrollY <= 300);
-		document.querySelectorAll('header').forEach((header) => {
-			header.dataset.autoHideHeader = 'true';
-			if (window.scrollY > 120 && window.scrollY > previousScrollY + 4) header.style.transform = 'translateY(-100%)';
-			else header.style.transform = 'translateY(0)';
-		});
-		previousScrollY = window.scrollY;
+		document.querySelector('#back-to-top')?.toggleAttribute('hidden', currentScrollY <= 300);
+
+		if (header && !document.body.classList.contains('drawer-open')) {
+			if (currentScrollY > lastScrollY && currentScrollY > 80) {
+				header.classList.add('header-hidden');
+			} else if (currentScrollY < lastScrollY) {
+				header.classList.remove('header-hidden');
+			}
+		}
+		lastScrollY = currentScrollY;
 		ticking = false;
 	};
 	window.addEventListener('scroll', () => {

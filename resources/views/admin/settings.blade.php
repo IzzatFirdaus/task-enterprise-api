@@ -4,7 +4,6 @@
     <div class="space-y-6">
         <div class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
             <div>
-                <p class="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-teal-700 dark:text-teal-300">Administration / configuration</p>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">System settings</h1>
                 <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Update site identity, contact, and availability settings.</p>
             </div>
@@ -15,7 +14,7 @@
             @method('PUT')
 
             <!-- Section 1: Application Identity -->
-            <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">Application Identity</h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Site name and admin contact email.</p>
@@ -28,7 +27,7 @@
                             type="text"
                             name="site_name"
                             value="{{ old('site_name', config('app.name')) }}"
-                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20"
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                             required
                         />
                         @error('site_name')
@@ -42,7 +41,7 @@
                             type="email"
                             name="admin_email"
                             value="{{ old('admin_email', 'admin@example.com') }}"
-                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20"
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                             required
                         />
                         @error('admin_email')
@@ -53,7 +52,7 @@
             </div>
 
             <!-- Section 2: Operational Controls -->
-            <div class="rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
+            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">Operational Controls</h2>
                     <p class="text-xs text-slate-500 dark:text-slate-400">Maintenance mode and user registration limits.</p>
@@ -64,7 +63,7 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-300">Maintenance Mode</label>
                         <select
                             name="maintenance_mode"
-                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20"
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                         >
                             <option value="0" {{ old('maintenance_mode', config('app.env') !== 'production' ? '0' : '1') === '0' ? 'selected' : '' }}>Off</option>
                             <option value="1" {{ old('maintenance_mode', config('app.env') === 'production' ? '1' : '0') === '1' ? 'selected' : '' }}>On</option>
@@ -80,7 +79,7 @@
                             type="number"
                             name="max_users"
                             value="{{ old('max_users', 500) }}"
-                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-cyan-500 dark:focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/20 dark:focus:ring-cyan-400/20"
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                         />
                         @error('max_users')
                             <p class="text-xs font-medium text-rose-600 dark:text-rose-400" role="alert">{{ $message }}</p>
@@ -93,7 +92,7 @@
             <div class="flex justify-end gap-3">
                 <button
                     type="submit"
-                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 dark:bg-cyan-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-cyan-700 dark:hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-cyan-500"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
                 >
                     Save settings
                 </button>
