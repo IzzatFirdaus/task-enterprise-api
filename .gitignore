@@ -24,6 +24,7 @@
 /storage/framework/views/*
 /test-results/
 /admin-test-output.json
+/.playwright-mcp/
 /vendor
 _ide_helper.php
 Homestead.json
