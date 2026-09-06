@@ -45,6 +45,7 @@ Route::get('/capabilities/{capability}', [PublicPageController::class, 'capabili
 Route::get('/blog', [PublicPageController::class, 'blog'])->name('blog.index');
 Route::get('/blog/{post}', [PublicPageController::class, 'post'])->name('blog.show');
 Route::get('/terms', [PublicPageController::class, 'terms'])->name('terms');
+Route::get('/cookie-policy', [PublicPageController::class, 'cookiePolicy'])->name('cookie-policy');
 Route::get('/privacy', [PublicPageController::class, 'privacy'])->name('privacy');
 Route::get('/faq', [PublicPageController::class, 'faq'])->name('faq');
 Route::get('/sitemap.xml', [PublicPageController::class, 'sitemap'])->name('sitemap');

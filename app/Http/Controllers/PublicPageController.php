@@ -108,6 +108,11 @@ class PublicPageController extends Controller
         return response(implode("\n", $lines), 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
     }
 
+    public function cookiePolicy(): Response
+    {
+        return response()->view('public.cookie-policy');
+    }
+
     public function sitemap(): Response
     {
         $entries = [
