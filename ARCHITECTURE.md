@@ -2,7 +2,7 @@
 
 ## Status and Scope
 
-- **Audit date:** 2026-09-03
+- **Audit date:** 2026-09-07
 - **Application:** Enterprise Task Management API and web dashboard
 - **Runtime:** PHP 8.5 in the current development environment
 - **Source of truth:** Registered routes, application code, migrations, configuration, views, and tests
@@ -82,6 +82,8 @@ tests/
 ```
 
 There are no application `Actions`, `Services`, `Repositories`, `Policies`, `Events`, `Listeners`, `Jobs`, `Notifications`, or domain/module directories. Controllers, Form Requests, Livewire components, and model scopes own the current application behavior.
+
+`docs/v1-archive/` contains superseded documentation and a small number of archived Blade scaffolds (the Breeze-style anonymous-component layout, the default navigation layout, the application-logo component, the default Laravel welcome view, and an empty placeholder `favicon.ico`). These are preserved for traceability; nothing active references them. The Laravel `storage/app` and `storage/framework` directories are excluded from this audit.
 
 ## Request and Authorization Boundaries
 
@@ -256,7 +258,7 @@ Administrative controllers provide dashboard statistics, user management, task m
 
 ### Blade and layout components
 
-`resources/views/layouts` contains the primary app, guest, admin, and navigation layouts. `resources/views/components` contains reusable buttons, forms, cards, badges, dropdowns, inputs, status messages, and layout components. There are two app-layout paths: `layouts/app.blade.php` and `components/layouts/app.blade.php`.
+`resources/views/layouts` contains the primary app, guest, admin, and public layouts used by the active routes. `resources/views/components` contains reusable buttons, forms, cards, badges, dropdowns, inputs, status messages, and page-level components. There is one active app layout at `resources/views/layouts/app.blade.php`; an earlier Breeze-style anonymous-component layout (`resources/views/components/layouts/app.blade.php`) and its companion `resources/views/components/application-logo.blade.php` were superseded by the `@extends('layouts.app')` pattern and archived under `docs/v1-archive/` on 2026-09-07 for traceability. A pre-existing `resources/views/layouts/navigation.blade.php` (Breeze default) is also archived because no view references it. The 404 and 500 error templates live under `resources/views/errors/`.
 
 ## Configuration and Environment
 
@@ -295,9 +297,9 @@ Not implemented despite configuration or dependency availability:
 
 ## Testing and Verification
 
-The test suite uses PHPUnit with `RefreshDatabase` for feature tests. Existing coverage includes authentication, personal task API ownership, admin access boundaries, suspension, role guardrails, task moderation, and selected audit behavior. Focused verification previously passed `TaskApiTest` and `AdminSystemTest` with 42 tests and 100 assertions.
+The test suite uses PHPUnit with `RefreshDatabase` for feature tests. The current full suite is 115 tests with 248 assertions; the focused baseline covers authentication, personal task API ownership, admin access boundaries, suspension, role guardrails, task moderation, and selected audit behavior. The focused baseline (`tests/Feature/TaskApiTest.php` + `tests/Feature/Admin/AdminSystemTest.php`) currently runs 42 tests with 100 assertions.
 
-`tests/Feature/Admin/AdminApiTest.php` contains placeholder assertions for many API concerns, so its test count must not be treated as proof of endpoint behavior. `tests/rbac-matrix.spec.ts` is a Playwright test file, but the repository audit did not establish a configured command or browser-runner workflow for it.
+`tests/Feature/Admin/AdminApiTest.php` contains 37 placeholder `assertTrue(true)` assertions across many API concerns, so its test count must not be treated as proof of endpoint behavior. `tests/Feature/ExampleTest.php` is the default Laravel example and asserts that the root URL returns a successful response (200 or redirect) — it was updated on 2026-09-07 to accept either 200 (the public guest page) or a redirect (signed-in staff). `tests/rbac-matrix.spec.ts` is a Playwright test file, but the repository audit did not establish a configured command or browser-runner workflow for it.
 
 ## Technical Debt and Known Issues
 

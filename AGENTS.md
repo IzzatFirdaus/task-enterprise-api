@@ -1,7 +1,21 @@
 <laravel-boost-guidelines>
 ## Repository Operating Contract
 
+- **Audit date:** 2026-09-07
+- **Companion documents:** [PRD.md](PRD.md), [ARCHITECTURE.md](ARCHITECTURE.md), [ARCHITECTURE-ESSENTIALS.md](ARCHITECTURE-ESSENTIALS.md), [CLAUDE.md](CLAUDE.md).
+- **Working tree note:** this repository routinely has unrelated pre-existing uncommitted modifications in the working tree. Always inspect `git status --short` before staging, and only stage and commit files you intentionally changed in the current turn.
+
 This repository is an in-development Laravel 13 task-management application. Keep personal task flows and administrative RBAC flows separate. Do not change feature logic while performing documentation or architecture audits.
+
+### Step-by-step development standard
+
+1. Read `.ai/rules/index.md` and every rule file whose globs cover the path(s) you plan to edit. Search the rules with `grep -rin 'keyword' .ai/rules` to catch what a path match alone misses.
+2. Inspect sibling files and active route registration before adding a new implementation. A file that exists is not necessarily active. Verify whether it is referenced.
+3. Make the smallest focused change that satisfies the requirement. Do not add dependencies, speculative modules, or new authorization sources without an explicit requirement.
+4. Apply conventions: explicit PHP types, curly-braced control structures, descriptive names, Blade components in the existing abstraction level, Livewire for reactive UI.
+5. Write or extend the narrowest PHPUnit feature test that covers the change. Cover authentication, ownership, privilege boundaries, validation, audit logging, and failure responses — not just the happy path. Do not use `assertTrue(true)` placeholders.
+6. Run the verification baseline below on every behavior change.
+7. Update companion docs only when behavior, routes, data model, or conventions actually changed. Do not churn docs for stylistic preference.
 
 ### Safe change boundaries
 
@@ -15,10 +29,27 @@ This repository is an in-development Laravel 13 task-management application. Kee
 ### Local conventions
 
 - Use Laravel controllers, Form Requests, Eloquent models/scopes, Blade, and Livewire components at the existing codebase's current abstraction level.
-- Keep web routes in `routes/web.php` and `routes/auth.php`; keep active API routes in `routes/api.php`. Verify route loading through `bootstrap/app.php`.
+- Keep web routes in `routes/web.php` and `routes/auth.php`; keep active API routes in `routes/api.php`. Verify route loading through `bootstrap/app.php`. `routes/admin-api.php` is an unloaded duplicate; do not add active routes there without changing bootstrap intentionally.
 - Use PHPUnit feature tests for request, authorization, validation, and ownership behavior. Run the narrowest relevant test file after each behavior change.
 - Use descriptive names, explicit PHP types, curly-braced control structures, and Pint for modified PHP files.
 - Do not treat placeholder assertions as coverage. Add assertions for the observable contract, especially authentication, ownership, privilege boundaries, validation, audit logging, and failure responses.
+
+### Git commit rules
+
+- Do not commit unless the user explicitly asks.
+- Before staging, run `git status --short` and `git diff --stat` to confirm only intended files are in the change set. Never commit secrets, credentials, or `.env` values.
+- Group changes by intent in one commit. Do not mix unrelated fixes in a feature commit.
+- Use Conventional Commits: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`, `perf:`. Imperative, present tense, lowercase summary line; optional body explaining the why.
+- Do not amend a commit the user already pushed; create a new commit instead.
+- Do not bypass hooks, force-push, or use `-i`/interactive operations on shared history without explicit user approval.
+
+### Boundary constraints
+
+- Do not add new authorization sources (a second `is_admin`-style column, a raw `role` string column, an `abilities` table) without an explicit requirement. Role relationships are canonical.
+- Do not introduce external services, queue jobs, notifications, mailables, or background workers without an explicit requirement. The current stack has none of these.
+- Do not add new base directories (`app/Actions`, `app/Services`, `app/Repositories`, `app/Policies`, etc.) without an explicit requirement. The current organization is controllers + form requests + Livewire + Eloquent scopes.
+- Do not enable new production integrations (S3, Redis, mail transports) until `.env.example` is updated and the related configuration is verified locally.
+- Do not describe the development defaults (SQLite, database sessions, log mailer) as production readiness in any document or message.
 
 ### Verification baseline
 
@@ -31,6 +62,8 @@ php artisan migrate:status
 npm run build
 vendor/bin/pint --dirty --format agent
 ```
+
+The full suite currently contains 115 tests with 248 assertions. The focused baseline is the contract for personal task ownership and admin boundaries; the admin API suite (`tests/Feature/Admin/AdminApiTest.php`) contains 37 `assertTrue(true)` placeholders and must not be treated as endpoint coverage.
 
 The application defaults to SQLite, database sessions/cache/queues, and the log mailer. Do not describe those development defaults as production readiness.
 
@@ -199,3 +232,15 @@ This project has domain-specific skills available in `**/skills/**`. You MUST ac
 - Run `vendor/bin/phpunit` to call the test runner directly. It accepts the same file path and `--filter=testName` arguments.
 
 </laravel-boost-guidelines>
+
+<!-- antislop:start -->
+## antislop
+For UI, copy, people, mobile layout, or code comments work, load the antislop skill for the task:
+- Core filter, always on: `antislop`
+- UI / visual: `antislop-ui`
+- Copy & text: `antislop-copywriting`
+- People: `antislop-human`
+- Mobile / responsive: `antislop-layoutmobile`
+- Code comments: `antislop-code`
+Before starting, ask the user when antislop applies: during the work, or after it is done.
+<!-- antislop:end -->
