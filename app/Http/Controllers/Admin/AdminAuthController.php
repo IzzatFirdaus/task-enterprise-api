@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -33,7 +34,7 @@ class AdminAuthController extends Controller
                 'changes' => [
                     'before' => null,
                     'after' => [
-                        'email' => $request->input('email'),
+                        'email_hash' => hash('sha256', mb_strtolower((string) $request->input('email'))),
                         'route' => $request->path(),
                     ],
                 ],
@@ -71,7 +72,7 @@ class AdminAuthController extends Controller
         return response()->json([
             'message' => 'Admin authenticated successfully.',
             'token' => $token,
-            'user' => $user->load('roles'),
+            'user' => (new UserResource($user->load('roles')))->resolve($request),
         ], 200);
     }
 }

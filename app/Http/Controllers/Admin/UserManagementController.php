@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SuspendUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\AuditLog;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class UserManagementController extends Controller
@@ -30,9 +32,7 @@ class UserManagementController extends Controller
      */
     public function apiIndex(): JsonResponse
     {
-        return response()->json(
-            User::query()->with('roles')->latest()->paginate(20)
-        );
+        return UserResource::collection(User::query()->with('roles')->latest()->paginate(20))->response();
     }
 
     /**
@@ -53,7 +53,7 @@ class UserManagementController extends Controller
      */
     public function apiShow(User $user): JsonResponse
     {
-        return response()->json($user->load('roles'));
+        return (new UserResource($user->load('roles')))->response();
     }
 
     /**
@@ -63,7 +63,7 @@ class UserManagementController extends Controller
     {
         $before = [
             'name' => $user->name,
-            'email' => $user->email,
+            'email_hash' => hash('sha256', mb_strtolower($user->email)),
             'roles' => $user->roles()->pluck('name')->all(),
         ];
 
@@ -83,7 +83,7 @@ class UserManagementController extends Controller
 
         $after = [
             'name' => $user->fresh()->name,
-            'email' => $user->fresh()->email,
+            'email_hash' => hash('sha256', mb_strtolower((string) $user->fresh()->email)),
             'roles' => $user->fresh()->roles()->pluck('name')->all(),
         ];
 
@@ -99,7 +99,7 @@ class UserManagementController extends Controller
     {
         $before = [
             'name' => $user->name,
-            'email' => $user->email,
+            'email_hash' => hash('sha256', mb_strtolower($user->email)),
             'roles' => $user->roles()->pluck('name')->all(),
         ];
 
@@ -115,13 +115,13 @@ class UserManagementController extends Controller
 
         $after = [
             'name' => $user->fresh()->name,
-            'email' => $user->fresh()->email,
+            'email_hash' => hash('sha256', mb_strtolower((string) $user->fresh()->email)),
             'roles' => $user->fresh()->roles()->pluck('name')->all(),
         ];
 
         $this->logUserAction($user, 'user_updated', $before, $after, $request);
 
-        return response()->json($user->fresh()->load('roles'), 200);
+        return (new UserResource($user->fresh()->load('roles')))->response();
     }
 
     /**
@@ -139,6 +139,7 @@ class UserManagementController extends Controller
             'suspended_at' => now(),
             'suspension_reason' => $request->input('reason'),
         ]);
+        $user->tokens()->delete();
 
         $after = [
             'is_suspended' => true,
@@ -168,6 +169,8 @@ class UserManagementController extends Controller
             'suspension_reason' => $request->input('reason'),
         ]);
 
+        $user->tokens()->delete();
+
         $after = [
             'is_suspended' => true,
             'reason' => $request->input('reason'),
@@ -177,7 +180,7 @@ class UserManagementController extends Controller
 
         $this->logUserAction($user, 'user_suspended', $before, $after, $request);
 
-        return response()->json(['message' => 'User suspended successfully.', 'user' => $user->fresh()], 200);
+        return response()->json(['message' => 'User suspended successfully.', 'user' => (new UserResource($user->fresh()))->resolve($request)]);
     }
 
     /**
@@ -231,7 +234,7 @@ class UserManagementController extends Controller
 
         $this->logUserAction($user, 'user_unsuspended', $before, $after, $request);
 
-        return response()->json(['message' => 'User unsuspended successfully.', 'user' => $user->fresh()], 200);
+        return response()->json(['message' => 'User unsuspended successfully.', 'user' => (new UserResource($user->fresh()))->resolve($request)]);
     }
 
     /**
@@ -268,7 +271,7 @@ class UserManagementController extends Controller
 
         $this->logUserAction($user, 'role_assigned', $before, $after, $request);
 
-        return response()->json(['message' => 'Role assigned.', 'user' => $user->fresh()->load('roles')], 200);
+        return response()->json(['message' => 'Role assigned.', 'user' => (new UserResource($user->fresh()->load('roles')))->resolve($request)]);
     }
 
     /**
@@ -278,16 +281,20 @@ class UserManagementController extends Controller
     {
         $this->ensureAdministratorTargetIsProtected($user, $request);
 
-        if ($role === Role::SUPER_ADMIN && $user->hasRole('super_admin') && User::query()->whereHas('roles', fn ($query) => $query->where('name', Role::SUPER_ADMIN))->count() < 3) {
-            abort(403, 'A second super administrator is required before removing this role.');
-        }
+        DB::transaction(function () use ($user, $role, $request): void {
+            $lockedUser = User::query()->whereKey($user->getKey())->lockForUpdate()->firstOrFail();
 
-        $roleModel = Role::query()->where('name', $role)->firstOrFail();
-        $before = ['role_name' => $user->roles()->pluck('name')->first()];
-        $user->roles()->detach($roleModel->getKey());
-        $after = ['role_name' => $user->fresh()->roles()->pluck('name')->first()];
+            if ($role === Role::SUPER_ADMIN && $lockedUser->hasRole(Role::SUPER_ADMIN) && User::query()->whereHas('roles', fn ($query) => $query->where('name', Role::SUPER_ADMIN))->lockForUpdate()->count() < 3) {
+                abort(403, 'A second super administrator is required before removing this role.');
+            }
 
-        $this->logUserAction($user, 'role_removed', $before, $after, $request);
+            $roleModel = Role::query()->where('name', $role)->firstOrFail();
+            $before = ['role_name' => $lockedUser->roles()->pluck('name')->first()];
+            $lockedUser->roles()->detach($roleModel->getKey());
+            $after = ['role_name' => $lockedUser->fresh()->roles()->pluck('name')->first()];
+
+            $this->logUserAction($lockedUser, 'role_removed', $before, $after, $request);
+        });
 
         return redirect()->back()->with('status', 'Role removed successfully.');
     }
@@ -299,18 +306,22 @@ class UserManagementController extends Controller
     {
         $this->ensureAdministratorTargetIsProtected($user, $request);
 
-        if ($role === Role::SUPER_ADMIN && $user->hasRole('super_admin') && User::query()->whereHas('roles', fn ($query) => $query->where('name', Role::SUPER_ADMIN))->count() < 3) {
-            abort(403, 'A second super administrator is required before removing this role.');
-        }
+        DB::transaction(function () use ($user, $role, $request): void {
+            $lockedUser = User::query()->whereKey($user->getKey())->lockForUpdate()->firstOrFail();
 
-        $roleModel = Role::query()->where('name', $role)->firstOrFail();
-        $before = ['role_name' => $user->roles()->pluck('name')->first()];
-        $user->roles()->detach($roleModel->getKey());
-        $after = ['role_name' => $user->fresh()->roles()->pluck('name')->first()];
+            if ($role === Role::SUPER_ADMIN && $lockedUser->hasRole(Role::SUPER_ADMIN) && User::query()->whereHas('roles', fn ($query) => $query->where('name', Role::SUPER_ADMIN))->lockForUpdate()->count() < 3) {
+                abort(403, 'A second super administrator is required before removing this role.');
+            }
 
-        $this->logUserAction($user, 'role_removed', $before, $after, $request);
+            $roleModel = Role::query()->where('name', $role)->firstOrFail();
+            $before = ['role_name' => $lockedUser->roles()->pluck('name')->first()];
+            $lockedUser->roles()->detach($roleModel->getKey());
+            $after = ['role_name' => $lockedUser->fresh()->roles()->pluck('name')->first()];
 
-        return response()->json(['message' => 'Role removed.', 'user' => $user->fresh()->load('roles')], 200);
+            $this->logUserAction($lockedUser, 'role_removed', $before, $after, $request);
+        });
+
+        return response()->json(['message' => 'Role removed.', 'user' => (new UserResource($user->fresh()->load('roles')))->resolve($request)]);
     }
 
     /**
@@ -320,13 +331,18 @@ class UserManagementController extends Controller
     {
         $this->ensureAdministratorTargetIsProtected($user, $request);
 
-        if ($user->isSuperAdmin() && User::query()->whereHas('roles', fn ($q) => $q->where('name', Role::SUPER_ADMIN))->count() <= 1) {
-            abort(403, 'The sole super administrator cannot be deleted.');
-        }
+        DB::transaction(function () use ($user, $request): void {
+            $lockedUser = User::query()->whereKey($user->getKey())->lockForUpdate()->firstOrFail();
 
-        $before = ['name' => $user->name, 'email' => $user->email];
-        $this->logUserAction($user, 'user_deleted', $before, ['status' => 'deleted'], $request);
-        $user->delete();
+            if ($lockedUser->isSuperAdmin() && User::query()->whereHas('roles', fn ($query) => $query->where('name', Role::SUPER_ADMIN))->lockForUpdate()->count() <= 1) {
+                abort(403, 'The sole super administrator cannot be deleted.');
+            }
+
+            $before = ['name' => $lockedUser->name, 'email_hash' => hash('sha256', mb_strtolower($lockedUser->email))];
+            $this->logUserAction($lockedUser, 'user_deleted', $before, ['status' => 'deleted'], $request);
+            $lockedUser->tokens()->delete();
+            $lockedUser->delete();
+        });
 
         return redirect()->route('admin.users.index')->with('status', 'User deleted.');
     }
@@ -338,13 +354,18 @@ class UserManagementController extends Controller
     {
         $this->ensureAdministratorTargetIsProtected($user, $request);
 
-        if ($user->isSuperAdmin() && User::query()->whereHas('roles', fn ($q) => $q->where('name', Role::SUPER_ADMIN))->count() <= 1) {
-            abort(403, 'The sole super administrator cannot be deleted.');
-        }
+        DB::transaction(function () use ($user, $request): void {
+            $lockedUser = User::query()->whereKey($user->getKey())->lockForUpdate()->firstOrFail();
 
-        $before = ['name' => $user->name, 'email' => $user->email];
-        $this->logUserAction($user, 'user_deleted', $before, ['status' => 'deleted'], $request);
-        $user->delete();
+            if ($lockedUser->isSuperAdmin() && User::query()->whereHas('roles', fn ($query) => $query->where('name', Role::SUPER_ADMIN))->lockForUpdate()->count() <= 1) {
+                abort(403, 'The sole super administrator cannot be deleted.');
+            }
+
+            $before = ['name' => $lockedUser->name, 'email_hash' => hash('sha256', mb_strtolower($lockedUser->email))];
+            $this->logUserAction($lockedUser, 'user_deleted', $before, ['status' => 'deleted'], $request);
+            $lockedUser->tokens()->delete();
+            $lockedUser->delete();
+        });
 
         return response()->json(['message' => 'User deleted.'], 200);
     }

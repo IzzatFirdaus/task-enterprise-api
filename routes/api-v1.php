@@ -26,15 +26,15 @@ Route::post('/logout', function (Request $request) {
     return response()->noContent();
 })->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function (): void {
     Route::apiResource('tasks', TaskController::class)
         ->except(['create', 'edit'])
-        ->names('api.tasks');
+        ->names('api.v1.tasks');
 });
 
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->middleware('throttle:5,1');
 
-Route::middleware(['auth:sanctum', 'role:admin,super_admin', 'throttle:60,1'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:admin,super_admin', 'throttle:60,1'])->group(function (): void {
     Route::get('/admin/users', [UserManagementController::class, 'apiIndex']);
     Route::get('/admin/users/{user}', [UserManagementController::class, 'apiShow']);
     Route::put('/admin/users/{user}', [UserManagementController::class, 'apiUpdate']);
@@ -43,29 +43,22 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin', 'throttle:60,1'])->
     Route::post('/admin/users/{user}/unsuspend', [UserManagementController::class, 'apiUnsuspend'])->middleware('throttle:10,1');
     Route::post('/admin/users/{user}/roles/{role}', [UserManagementController::class, 'apiAssignRole'])->middleware('throttle:20,1');
     Route::delete('/admin/users/{user}/roles/{role}', [UserManagementController::class, 'apiRemoveRole'])->middleware('throttle:20,1');
-
     Route::get('/admin/analytics/dashboard', [AdminAnalyticsController::class, 'dashboard']);
     Route::get('/admin/analytics/users', [AdminAnalyticsController::class, 'users']);
     Route::get('/admin/analytics/tasks', [AdminAnalyticsController::class, 'tasks']);
-
-    Route::middleware(['role:super_admin', 'throttle:30,1'])->group(function () {
+    Route::middleware(['role:super_admin', 'throttle:30,1'])->group(function (): void {
         Route::get('/admin/audit-logs', [AuditLogController::class, 'apiIndex']);
         Route::get('/admin/audit-logs/{auditLog}', [AuditLogController::class, 'apiShow']);
         Route::get('/admin/audit-logs/export', [AuditLogController::class, 'apiExport']);
-
         Route::get('/admin/settings', [AdminSettingsController::class, 'apiIndex']);
         Route::put('/admin/settings', [AdminSettingsController::class, 'apiUpdate']);
     });
 });
 
-Route::middleware(['auth:sanctum', 'role:moderator,admin,super_admin', 'throttle:60,1'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:moderator,admin,super_admin', 'throttle:60,1'])->group(function (): void {
     Route::get('/admin/tasks', [TaskModerationController::class, 'apiIndex']);
     Route::get('/admin/tasks/{task}', [TaskModerationController::class, 'apiShow']);
     Route::put('/admin/tasks/{task}', [TaskModerationController::class, 'apiReassign']);
     Route::delete('/admin/tasks/{task}', [TaskModerationController::class, 'apiDelete']);
     Route::post('/admin/tasks/bulk-action', [TaskModerationController::class, 'apiBulkAction'])->middleware('throttle:20,1');
-});
-
-Route::prefix('v1')->group(function (): void {
-    require __DIR__.'/api-v1.php';
 });

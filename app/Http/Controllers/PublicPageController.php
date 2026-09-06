@@ -65,26 +65,89 @@ class PublicPageController extends Controller
         return view('public.blog.show', ['post' => $article]);
     }
 
+    public function faq(): View
+    {
+        return view('public.faq');
+    }
+
     public function terms(): View
     {
         return view('public.terms');
     }
 
+    public function privacy(): View
+    {
+        return view('public.privacy');
+    }
+
+    public function llms(): Response
+    {
+        $lines = [
+            '# Enterprise Tasks',
+            'Source: '.url('/'),
+            '',
+            'Enterprise Tasks is a personal task management application with administrative governance.',
+            '',
+            '## Public pages',
+            '- Home: '.url('/'),
+            '- About: '.route('about'),
+            '- Capabilities: '.route('capabilities'),
+            '- FAQ: '.route('faq'),
+            '- Terms of Service: '.route('terms'),
+            '- Privacy Policy: '.route('privacy'),
+            '',
+            '## Data collected',
+            'The application stores: name, email, password hash, role assignments, task content, and administrative audit logs.',
+            'No advertising cookies are used. Only essential session and preference storage.',
+            '',
+            '## Legal',
+            'For terms of service, see: '.route('terms'),
+            'For privacy policy, see: '.route('privacy'),
+        ];
+
+        return response(implode("\n", $lines), 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+    }
+
     public function sitemap(): Response
     {
-        $urls = collect([
-            route('about'),
-            route('capabilities'),
-            route('blog.index'),
-            route('terms'),
-            route('login'),
-            route('register'),
-        ])->merge(collect(array_keys(self::CAPABILITIES))->map(fn (string $slug): string => route('capabilities.show', $slug)))
-            ->merge(collect($this->posts())->map(fn (array $post): string => route('blog.show', $post['slug'])));
+        $entries = [
+            ['loc' => url('/'), 'changefreq' => 'weekly', 'priority' => '1.0'],
+            ['loc' => route('about'), 'changefreq' => 'monthly', 'priority' => '0.6'],
+            ['loc' => route('faq'), 'changefreq' => 'monthly', 'priority' => '0.5'],
+            ['loc' => route('capabilities'), 'changefreq' => 'monthly', 'priority' => '0.8'],
+            ['loc' => route('blog.index'), 'changefreq' => 'weekly', 'priority' => '0.7'],
+            ['loc' => route('terms'), 'changefreq' => 'yearly', 'priority' => '0.3'],
+            ['loc' => route('privacy'), 'changefreq' => 'yearly', 'priority' => '0.3'],
+        ];
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        foreach ($urls->unique() as $url) {
-            $xml .= '<url><loc>'.e($url).'</loc></url>';
+        foreach (array_keys(self::CAPABILITIES) as $slug) {
+            $entries[] = [
+                'loc' => route('capabilities.show', $slug),
+                'changefreq' => 'monthly',
+                'priority' => '0.6',
+            ];
+        }
+
+        foreach ($this->posts() as $post) {
+            $entries[] = [
+                'loc' => route('blog.show', $post['slug']),
+                'lastmod' => $this->sitemapDate($post['date'] ?? null),
+                'changefreq' => 'monthly',
+                'priority' => '0.6',
+            ];
+        }
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+        $xml .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+        foreach ($entries as $entry) {
+            $xml .= '<url>';
+            $xml .= '<loc>'.e($entry['loc']).'</loc>';
+            if (! empty($entry['lastmod'])) {
+                $xml .= '<lastmod>'.e($entry['lastmod']).'</lastmod>';
+            }
+            $xml .= '<changefreq>'.e($entry['changefreq']).'</changefreq>';
+            $xml .= '<priority>'.e($entry['priority']).'</priority>';
+            $xml .= '</url>';
         }
         $xml .= '</urlset>';
 
@@ -96,6 +159,17 @@ class PublicPageController extends Controller
         abort_if(config('app.seo.google_verification') === null, 404);
 
         return response('google-site-verification: '.config('app.seo.google_verification'));
+    }
+
+    private function sitemapDate(mixed $value): ?string
+    {
+        if (! is_string($value) || $value === '') {
+            return null;
+        }
+
+        $timestamp = strtotime($value);
+
+        return $timestamp === false ? null : gmdate('Y-m-d', $timestamp);
     }
 
     /** @return array<int, array{slug: string, title: string, description: string, date: string, body: string}> */

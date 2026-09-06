@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AuditLogResource;
 use App\Models\AuditLog;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AuditLogController extends Controller
@@ -59,7 +59,7 @@ class AuditLogController extends Controller
             $query->where('model_type', $request->input('model_type'));
         }
 
-        return response()->json($query->latest('created_at')->paginate(25));
+        return AuditLogResource::collection($query->latest('created_at')->paginate(25))->response();
     }
 
     /**
@@ -79,41 +79,40 @@ class AuditLogController extends Controller
     {
         $this->ensureSuperAdmin(request());
 
-        return response()->json($auditLog->load('admin'));
+        return (new AuditLogResource($auditLog))->response();
     }
 
     /**
      * Export logs as CSV.
      */
-    public function export(Request $request): Response
+    public function export(Request $request): StreamedResponse
     {
         $this->ensureSuperAdmin($request);
 
-        $logs = AuditLog::query()->with('admin')->latest('created_at')->get();
-        $output = fopen('php://temp', 'wb+');
+        return response()->streamDownload(function (): void {
+            $output = fopen('php://output', 'wb');
 
-        fputcsv($output, ['admin_id', 'action', 'model_type', 'model_id', 'changes', 'ip_address', 'user_agent', 'created_at']);
+            fputcsv($output, ['admin_id', 'action', 'model_type', 'model_id', 'changes', 'ip_address', 'user_agent', 'created_at']);
 
-        foreach ($logs as $log) {
-            fputcsv($output, [
-                $log->admin_id,
-                $log->action,
-                $log->model_type,
-                $log->model_id,
-                json_encode($log->changes),
-                $log->ip_address,
-                $log->user_agent,
-                $log->created_at?->toDateTimeString(),
-            ]);
-        }
+            AuditLog::query()
+                ->latest('created_at')
+                ->lazyById(500, 'id')
+                ->each(function (AuditLog $log) use ($output): void {
+                    fputcsv($output, [
+                        $log->admin_id,
+                        $log->action,
+                        $log->model_type,
+                        $log->model_id,
+                        json_encode($log->changes),
+                        $log->ip_address,
+                        $log->user_agent,
+                        $log->created_at?->toDateTimeString(),
+                    ]);
+                });
 
-        rewind($output);
-        $csv = stream_get_contents($output);
-        fclose($output);
-
-        return response($csv, 200, [
+            fclose($output);
+        }, 'audit-logs.csv', [
             'Content-Type' => 'text/csv; charset=UTF-8',
-            'Content-Disposition' => 'attachment; filename="audit-logs.csv"',
         ]);
     }
 

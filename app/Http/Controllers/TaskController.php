@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -23,7 +24,7 @@ class TaskController extends Controller
             ->paginate(15);
 
         return $request->expectsJson()
-            ? response()->json($tasks)
+            ? TaskResource::collection($tasks)->response()
             : view('tasks.index', ['tasks' => $tasks]);
     }
 
@@ -45,7 +46,7 @@ class TaskController extends Controller
 
         $task = Task::create($validated);
 
-        return response()->json($task, 201);
+        return response()->json((new TaskResource($task))->resolve($request), 201);
     }
 
     /**
@@ -56,7 +57,7 @@ class TaskController extends Controller
         $this->ensureOwnership($request, $task);
 
         return $request->expectsJson()
-            ? response()->json($task)
+            ? response()->json((new TaskResource($task))->resolve($request))
             : view('tasks.show', ['task' => $task]);
     }
 
@@ -78,7 +79,7 @@ class TaskController extends Controller
         $this->ensureOwnership($request, $task);
         $task->update($request->validated());
 
-        return response()->json($task->refresh());
+        return response()->json((new TaskResource($task->refresh()))->resolve($request));
     }
 
     /**
