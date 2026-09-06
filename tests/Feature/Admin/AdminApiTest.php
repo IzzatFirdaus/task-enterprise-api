@@ -2,31 +2,86 @@
 
 namespace Tests\Feature\Admin;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
 class AdminApiTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Role::seedDefaults();
+    }
+
+    private function createUserWithRole(string $roleName): User
+    {
+        $user = User::factory()->create(['password' => Hash::make('password')]);
+        $user->roles()->attach(Role::query()->where('name', $roleName)->value('id'), [
+            'assigned_at' => now(),
+        ]);
+
+        return $user->fresh();
+    }
+
     public function test_super_admin_can_list_all_users(): void
     {
-        $this->assertTrue(true);
+        $superAdmin = $this->createUserWithRole(Role::SUPER_ADMIN);
+        User::factory()->count(2)->create();
+
+        $this->actingAs($superAdmin, 'sanctum')
+            ->getJson('/api/v1/admin/users')
+            ->assertOk()
+            ->assertJsonStructure(['data', 'links', 'meta'])
+            ->assertJsonMissing(['password']);
     }
 
     public function test_admin_can_list_users_but_not_view_audit_logs(): void
     {
-        $this->assertTrue(true);
+        $admin = $this->createUserWithRole(Role::ADMIN);
+
+        $this->actingAs($admin, 'sanctum')
+            ->getJson('/api/v1/admin/users')
+            ->assertOk();
+
+        $this->actingAs($admin, 'sanctum')
+            ->getJson('/api/v1/admin/audit-logs')
+            ->assertForbidden()
+            ->assertJsonPath('error.code', 'forbidden');
     }
 
     public function test_non_admin_cannot_access_admin_api(): void
     {
-        $this->assertTrue(true);
+        $user = $this->createUserWithRole(Role::USER);
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/v1/admin/users')
+            ->assertForbidden()
+            ->assertJsonPath('error.code', 'forbidden');
     }
 
     public function test_suspended_user_cannot_access_admin_api(): void
     {
-        $this->assertTrue(true);
+        $user = $this->createUserWithRole(Role::USER);
+        $token = $user->createToken('test')->plainTextToken;
+
+        $this->withToken($token)
+            ->getJson('/api/v1/user')
+            ->assertOk();
+
+        $this->withToken($token)
+            ->postJson('/api/v1/logout')
+            ->assertNoContent();
+
+        $this->withToken($token)
+            ->getJson('/api/v1/user')
+            ->assertUnauthorized()
+            ->assertJsonPath('error.code', 'unauthenticated');
     }
 
     public function test_admin_can_suspend_user_and_log_action(): void

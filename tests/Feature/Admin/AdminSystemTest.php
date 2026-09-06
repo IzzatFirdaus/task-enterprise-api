@@ -489,13 +489,15 @@ class AdminSystemTest extends TestCase
     {
         $superAdmin = $this->createUserWithRole(Role::SUPER_ADMIN, ['email' => 'csv-headers-admin@example.com']);
 
-        $this->actingAs($superAdmin)
+        $content = $this->actingAs($superAdmin)
             ->get('/admin/audit-logs/export')
             ->assertOk()
-            ->assertSeeText('admin_id')
-            ->assertSeeText('action')
-            ->assertSeeText('model_type')
-            ->assertSeeText('changes');
+            ->streamedContent();
+
+        $this->assertStringContainsString('admin_id', $content);
+        $this->assertStringContainsString('action', $content);
+        $this->assertStringContainsString('model_type', $content);
+        $this->assertStringContainsString('changes', $content);
     }
 
     public function test_non_super_admin_cannot_export_audit_logs(): void
