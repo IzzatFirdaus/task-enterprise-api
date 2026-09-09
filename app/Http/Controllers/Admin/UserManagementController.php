@@ -375,7 +375,7 @@ class UserManagementController extends Controller
         AuditLog::create([
             'admin_id' => $request->user()?->getKey(),
             'action' => $action,
-            'model_type' => 'User',
+            'model_type' => User::class,
             'model_id' => $user->getKey(),
             'changes' => ['before' => $before, 'after' => $after],
             'ip_address' => $request->ip(),

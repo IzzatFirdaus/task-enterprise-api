@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AuditLog extends Model
 {
@@ -41,13 +42,21 @@ class AuditLog extends Model
             return null;
         }
 
-        $className = '\\App\\Models\\'.$this->model_type;
+        $className = str_contains($this->model_type, '\\')
+            ? $this->model_type
+            : '\\App\\Models\\'.$this->model_type;
 
-        if (! class_exists($className)) {
+        if (! class_exists($className) || ! is_subclass_of($className, Model::class)) {
             return null;
         }
 
-        return $className::query()->find($this->model_id);
+        $query = $className::query();
+
+        if (in_array(SoftDeletes::class, class_uses_recursive($className), true)) {
+            $query->withTrashed();
+        }
+
+        return $query->find($this->model_id);
     }
 
     public function scopeRecent(Builder $query): Builder

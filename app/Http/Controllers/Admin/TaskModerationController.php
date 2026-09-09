@@ -100,12 +100,13 @@ class TaskModerationController extends Controller
         $processed = 0;
         $failed = [];
 
-        foreach ($taskIds as $taskId) {
-            $success = DB::transaction(function () use ($taskId, $action, $targetUserId, $request): bool {
+        DB::transaction(function () use ($taskIds, $action, $targetUserId, $request, &$processed, &$failed): void {
+            foreach ($taskIds as $taskId) {
                 $task = Task::query()->where('id', $taskId)->lockForUpdate()->first();
 
                 if (! $task) {
-                    return false;
+                    $failed[] = $taskId;
+                    continue;
                 }
 
                 if ($action === 'delete') {
@@ -118,15 +119,9 @@ class TaskModerationController extends Controller
                     $this->queueAuditLog($task, 'task_reassigned', $before, $after, $request);
                 }
 
-                return true;
-            });
-
-            if ($success) {
                 $processed++;
-            } else {
-                $failed[] = $taskId;
             }
-        }
+        });
 
         $this->flushAuditLogs();
 
@@ -147,7 +142,7 @@ class TaskModerationController extends Controller
         $this->auditEntries[] = [
             'admin_id' => $request->user()?->getKey(),
             'action' => $action,
-            'model_type' => 'Task',
+            'model_type' => Task::class,
             'model_id' => $task->getKey(),
             'changes' => ['before' => $before, 'after' => $after],
             'ip_address' => $request->ip(),

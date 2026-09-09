@@ -39,7 +39,7 @@ class RoleMiddleware
             AuditLog::create([
                 'admin_id' => $user->getKey(),
                 'action' => 'access_denied',
-                'model_type' => 'RoleMiddleware',
+                'model_type' => self::class,
                 'model_id' => $user->getKey(),
                 'changes' => [
                     'before' => null,

@@ -67,7 +67,3 @@ Route::middleware(['auth:sanctum', 'suspended', 'role:moderator,admin,super_admi
     Route::put('/admin/tasks/{task}/status', [TaskModerationController::class, 'updateStatus']);
     Route::post('/admin/tasks/bulk-action', [TaskModerationController::class, 'bulkAction'])->middleware('throttle:20,1');
 });
-
-Route::prefix('v1')->group(function (): void {
-    require __DIR__.'/api-v1.php';
-});

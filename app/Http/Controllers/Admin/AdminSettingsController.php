@@ -50,7 +50,7 @@ class AdminSettingsController extends Controller
         AuditLog::create([
             'admin_id' => $request->user()->getKey(),
             'action' => 'update',
-            'model_type' => 'AdminSettings',
+            'model_type' => Setting::class,
             'model_id' => $request->user()->getKey(),
             'changes' => [
                 'before' => $before,
@@ -79,7 +79,7 @@ class AdminSettingsController extends Controller
         AuditLog::create([
             'admin_id' => $request->user()->getKey(),
             'action' => 'update',
-            'model_type' => 'AdminSettings',
+            'model_type' => Setting::class,
             'model_id' => $request->user()->getKey(),
             'changes' => [
                 'before' => $before,

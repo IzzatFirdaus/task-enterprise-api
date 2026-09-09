@@ -29,7 +29,7 @@ class AdminAuthController extends Controller
             AuditLog::create([
                 'admin_id' => $user?->getKey(),
                 'action' => 'login_failed',
-                'model_type' => 'AdminAuthController',
+                'model_type' => self::class,
                 'model_id' => $user?->getKey(),
                 'changes' => [
                     'before' => null,
@@ -58,7 +58,7 @@ class AdminAuthController extends Controller
         AuditLog::create([
             'admin_id' => $user->getKey(),
             'action' => 'login',
-            'model_type' => 'User',
+            'model_type' => User::class,
             'model_id' => $user->getKey(),
             'changes' => [
                 'before' => null,
