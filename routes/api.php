@@ -59,11 +59,13 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin', 'throttle:60,1'])->
 });
 
 Route::middleware(['auth:sanctum', 'role:moderator,admin,super_admin', 'throttle:60,1'])->group(function () {
-    Route::get('/admin/tasks', [TaskModerationController::class, 'apiIndex']);
-    Route::get('/admin/tasks/{task}', [TaskModerationController::class, 'apiShow']);
-    Route::put('/admin/tasks/{task}', [TaskModerationController::class, 'apiReassign']);
-    Route::delete('/admin/tasks/{task}', [TaskModerationController::class, 'apiDelete']);
-    Route::post('/admin/tasks/bulk-action', [TaskModerationController::class, 'apiBulkAction'])->middleware('throttle:20,1');
+    Route::get('/admin/tasks', [TaskModerationController::class, 'index']);
+    Route::get('/admin/tasks/{task}', [TaskModerationController::class, 'show']);
+    Route::put('/admin/tasks/{task}', [TaskModerationController::class, 'reassignTask']);
+    Route::delete('/admin/tasks/{task}', [TaskModerationController::class, 'deleteTask']);
+    Route::patch('/admin/tasks/{task}/restore', [TaskModerationController::class, 'restore']);
+    Route::put('/admin/tasks/{task}/status', [TaskModerationController::class, 'updateStatus']);
+    Route::post('/admin/tasks/bulk-action', [TaskModerationController::class, 'bulkAction'])->middleware('throttle:20,1');
 });
 
 Route::prefix('v1')->group(function (): void {

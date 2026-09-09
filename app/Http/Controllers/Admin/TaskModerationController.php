@@ -3,22 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\BulkTaskActionRequest;
+use App\Http\Requests\Admin\ReassignTaskRequest;
+use App\Http\Requests\Admin\UpdateTaskStatusRequest;
 use App\Http\Resources\TaskResource;
-use App\Models\AuditLog;
+use App\Jobs\ProcessAuditLog;
 use App\Models\Task;
-use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 class TaskModerationController extends Controller
 {
-    /**
-     * Display all tasks for moderation.
-     */
+    private array $auditEntries = [];
+
     public function index(): View
     {
         $tasks = Task::query()->with('user')->latest()->paginate(20);
@@ -26,17 +26,6 @@ class TaskModerationController extends Controller
         return view('admin.tasks.index', compact('tasks'));
     }
 
-    /**
-     * Return all tasks for the admin API.
-     */
-    public function apiIndex(): JsonResponse
-    {
-        return TaskResource::collection(Task::query()->latest()->paginate(20))->response();
-    }
-
-    /**
-     * Display a single task for moderation.
-     */
     public function show(Task $task): View
     {
         return view('admin.tasks.show', [
@@ -44,201 +33,118 @@ class TaskModerationController extends Controller
         ]);
     }
 
-    /**
-     * Return a single task for the admin API.
-     */
-    public function apiShow(Task $task): JsonResponse
+    public function reassignTask(ReassignTaskRequest $request, Task $task): RedirectResponse|JsonResponse
     {
-        return (new TaskResource($task))->response();
-    }
-
-    /**
-     * Reassign a task to another user.
-     */
-    public function reassignTask(Request $request, Task $task): RedirectResponse
-    {
-        $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
-        ]);
-
         $before = ['user_id' => $task->user_id];
-        $task->update(['user_id' => $request->input('user_id')]);
+        $task->update(['user_id' => $request->integer('user_id')]);
         $after = ['user_id' => $task->fresh()->user_id];
 
-        $this->logTaskAction($task, 'task_reassigned', $before, $after, $request);
+        $this->queueAuditLog($task, 'task_reassigned', $before, $after, $request);
 
-        return redirect()->route('admin.tasks.index')->with('status', 'Task reassigned.');
+        return $this->respond(
+            $request,
+            redirect()->route('admin.tasks.index')->with('status', 'Task reassigned.'),
+            fn () => response()->json(['message' => 'Task reassigned.', 'task' => (new TaskResource($task->fresh()))->resolve($request)])
+        );
     }
 
-    /**
-     * Reassign a task through the admin API.
-     */
-    public function apiReassign(Request $request, Task $task): JsonResponse
+    public function updateStatus(UpdateTaskStatusRequest $request, Task $task): RedirectResponse|JsonResponse
     {
-        $request->validate([
-            'user_id' => ['required', 'exists:users,id'],
-        ]);
-
-        $before = ['user_id' => $task->user_id];
-        $task->update(['user_id' => $request->input('user_id')]);
-        $after = ['user_id' => $task->fresh()->user_id];
-
-        $this->logTaskAction($task, 'task_reassigned', $before, $after, $request);
-
-        return response()->json(['message' => 'Task reassigned.', 'task' => (new TaskResource($task->fresh()))->resolve($request)]);
-    }
-
-    /**
-     * Update the task status.
-     */
-    public function updateStatus(Request $request, Task $task): RedirectResponse
-    {
-        $request->validate([
-            'status' => ['required', 'in:pending,in_progress,completed'],
-        ]);
-
         $before = ['status' => $task->status];
-        $task->update(['status' => $request->input('status')]);
+        $task->update(['status' => $request->string('status')]);
         $after = ['status' => $task->fresh()->status];
 
-        $this->logTaskAction($task, 'task_status_updated', $before, $after, $request);
+        $this->queueAuditLog($task, 'task_status_updated', $before, $after, $request);
 
-        return redirect()->route('admin.tasks.index')->with('status', 'Task status updated.');
+        return $this->respond(
+            $request,
+            redirect()->route('admin.tasks.index')->with('status', 'Task status updated.'),
+            fn () => response()->json(['message' => 'Task status updated.', 'task' => (new TaskResource($task->fresh()))->resolve($request)])
+        );
     }
 
-    /**
-     * Update the task status through the admin API.
-     */
-    public function apiUpdateStatus(Request $request, Task $task): JsonResponse
+    public function restore(Task $task): RedirectResponse|JsonResponse
     {
-        $request->validate([
-            'status' => ['required', 'in:pending,in_progress,completed'],
-        ]);
-
-        $before = ['status' => $task->status];
-        $task->update(['status' => $request->input('status')]);
-        $after = ['status' => $task->fresh()->status];
-
-        $this->logTaskAction($task, 'task_status_updated', $before, $after, $request);
-
-        return response()->json(['message' => 'Task status updated.', 'task' => (new TaskResource($task->fresh()))->resolve($request)]);
-    }
-
-    /**
-     * Restore a soft deleted task.
-     */
-    public function restore(Task $task): RedirectResponse
-    {
+        $deletedAt = $task->deleted_at;
         $task->restore();
-        $this->logTaskAction($task, 'task_restored', ['deleted_at' => $task->deleted_at], ['deleted_at' => null], request());
 
-        return redirect()->route('admin.tasks.index')->with('status', 'Task restored.');
+        $this->queueAuditLog($task, 'task_restored', ['deleted_at' => $deletedAt], ['deleted_at' => null], request());
+
+        return $this->respond(
+            request(),
+            redirect()->route('admin.tasks.index')->with('status', 'Task restored.'),
+            fn () => response()->json(['message' => 'Task restored.', 'task' => (new TaskResource($task->fresh()))->resolve(request())])
+        );
     }
 
-    /**
-     * Restore a soft deleted task through the admin API.
-     */
-    public function apiRestore(Task $task): JsonResponse
+    public function deleteTask(Task $task): RedirectResponse|JsonResponse
     {
-        $task->restore();
-        $this->logTaskAction($task, 'task_restored', ['deleted_at' => $task->deleted_at], ['deleted_at' => null], request());
-
-        return response()->json(['message' => 'Task restored.', 'task' => (new TaskResource($task->fresh()))->resolve(request())]);
-    }
-
-    /**
-     * Delete a task record.
-     */
-    public function deleteTask(Task $task): RedirectResponse
-    {
-        $this->logTaskAction($task, 'task_deleted', ['deleted_at' => $task->deleted_at], ['deleted_at' => now()->toDateTimeString()], request());
+        $deletedAt = $task->deleted_at;
+        $this->queueAuditLog($task, 'task_deleted', ['deleted_at' => $deletedAt], ['deleted_at' => now()->toDateTimeString()], request());
         $task->delete();
 
-        return redirect()->route('admin.tasks.index')->with('status', 'Task deleted.');
+        return $this->respond(
+            request(),
+            redirect()->route('admin.tasks.index')->with('status', 'Task deleted.'),
+            fn () => response()->json(['message' => 'Task deleted.'], 200)
+        );
     }
 
-    /**
-     * Delete a task through the admin API.
-     */
-    public function apiDelete(Task $task): JsonResponse
+    public function bulkAction(BulkTaskActionRequest $request): RedirectResponse|JsonResponse
     {
-        $this->logTaskAction($task, 'task_deleted', ['deleted_at' => $task->deleted_at], ['deleted_at' => now()->toDateTimeString()], request());
-        $task->delete();
+        $validated = $request->validated();
+        $taskIds = $validated['task_ids'];
+        $action = $validated['action'];
+        $targetUserId = $validated['user_id'] ?? null;
 
-        return response()->json(['message' => 'Task deleted.'], 200);
-    }
+        $processed = 0;
+        $failed = [];
 
-    /**
-     * Perform a bulk task action.
-     */
-    public function bulkAction(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'task_ids' => ['required', 'array', 'max:100'],
-            'task_ids.*' => ['integer', 'distinct', Rule::exists('tasks', 'id')->whereNull('deleted_at')],
-            'action' => ['required', 'in:delete,reassign'],
-            'user_id' => ['required_if:action,reassign', 'nullable', 'exists:users,id'],
-        ]);
+        foreach ($taskIds as $taskId) {
+            $success = DB::transaction(function () use ($taskId, $action, $targetUserId, $request): bool {
+                $task = Task::query()->where('id', $taskId)->lockForUpdate()->first();
 
-        DB::transaction(function () use ($validated, $request): void {
-            $tasks = Task::query()->whereIn('id', $validated['task_ids'])->lockForUpdate()->get();
+                if (! $task) {
+                    return false;
+                }
 
-            foreach ($tasks as $task) {
-                if ($validated['action'] === 'delete') {
-                    $this->logTaskAction($task, 'task_deleted', ['deleted_at' => $task->deleted_at], ['deleted_at' => now()->toDateTimeString()], $request);
+                if ($action === 'delete') {
+                    $this->queueAuditLog($task, 'task_deleted', ['deleted_at' => $task->deleted_at], ['deleted_at' => now()->toDateTimeString()], $request);
                     $task->delete();
-                }
-
-                if ($validated['action'] === 'reassign') {
+                } elseif ($action === 'reassign') {
                     $before = ['user_id' => $task->user_id];
-                    $task->update(['user_id' => $validated['user_id']]);
+                    $task->update(['user_id' => $targetUserId]);
                     $after = ['user_id' => $task->fresh()->user_id];
-                    $this->logTaskAction($task, 'task_reassigned', $before, $after, $request);
+                    $this->queueAuditLog($task, 'task_reassigned', $before, $after, $request);
                 }
-            }
-        });
 
-        return redirect()->route('admin.tasks.index')->with('status', 'Bulk task action completed.');
+                return true;
+            });
+
+            if ($success) {
+                $processed++;
+            } else {
+                $failed[] = $taskId;
+            }
+        }
+
+        $this->flushAuditLogs();
+
+        $message = "Bulk task action completed. Processed: {$processed}";
+        if ($failed !== []) {
+            $message .= '. Failed (locked or missing): '.implode(', ', $failed);
+        }
+
+        return $this->respond(
+            $request,
+            redirect()->route('admin.tasks.index')->with('status', $message),
+            fn () => response()->json(['message' => $message, 'processed' => $processed, 'failed' => $failed], 200)
+        );
     }
 
-    /**
-     * Execute a bulk task action through the admin API.
-     */
-    public function apiBulkAction(Request $request): JsonResponse
+    private function queueAuditLog(Task $task, string $action, array $before, array $after, Request $request): void
     {
-        $validated = $request->validate([
-            'task_ids' => ['required', 'array', 'max:100'],
-            'task_ids.*' => ['integer', 'distinct', Rule::exists('tasks', 'id')->whereNull('deleted_at')],
-            'action' => ['required', 'in:delete,reassign'],
-            'user_id' => ['required_if:action,reassign', 'nullable', 'exists:users,id'],
-        ]);
-
-        $count = DB::transaction(function () use ($validated, $request): int {
-            $tasks = Task::query()->whereIn('id', $validated['task_ids'])->lockForUpdate()->get();
-
-            foreach ($tasks as $task) {
-                if ($validated['action'] === 'delete') {
-                    $this->logTaskAction($task, 'task_deleted', ['deleted_at' => $task->deleted_at], ['deleted_at' => now()->toDateTimeString()], $request);
-                    $task->delete();
-                }
-
-                if ($validated['action'] === 'reassign') {
-                    $before = ['user_id' => $task->user_id];
-                    $task->update(['user_id' => $validated['user_id']]);
-                    $after = ['user_id' => $task->fresh()->user_id];
-                    $this->logTaskAction($task, 'task_reassigned', $before, $after, $request);
-                }
-            }
-
-            return $tasks->count();
-        });
-
-        return response()->json(['message' => 'Bulk task action completed.', 'count' => $count], 200);
-    }
-
-    private function logTaskAction(Task $task, string $action, array $before, array $after, Request $request): void
-    {
-        AuditLog::create([
+        $this->auditEntries[] = [
             'admin_id' => $request->user()?->getKey(),
             'action' => $action,
             'model_type' => 'Task',
@@ -247,6 +153,19 @@ class TaskModerationController extends Controller
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent(),
             'created_at' => now(),
-        ]);
+        ];
+    }
+
+    private function flushAuditLogs(): void
+    {
+        if ($this->auditEntries !== []) {
+            ProcessAuditLog::dispatchAfterResponse($this->auditEntries);
+            $this->auditEntries = [];
+        }
+    }
+
+    private function respond(Request $request, RedirectResponse $webResponse, callable $jsonResponse): RedirectResponse|JsonResponse
+    {
+        return $request->expectsJson() ? $jsonResponse() : $webResponse;
     }
 }
