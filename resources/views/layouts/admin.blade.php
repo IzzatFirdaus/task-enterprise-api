@@ -32,7 +32,9 @@
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
         <link rel="icon" href="{{ asset('favicon-32x32.svg') }}" type="image/svg+xml" sizes="32x32">
         <link rel="icon" href="{{ asset('favicon-192x192.svg') }}" type="image/svg+xml" sizes="192x192">
+        <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
         <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.svg') }}" sizes="180x180">
+        <meta name="theme-color" content="#0e7490">
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
         @if (config('app.seo.google_verification'))
             <meta name="google-site-verification" content="{{ config('app.seo.google_verification') }}">
@@ -54,7 +56,7 @@
                     <button
                         type="button"
                         @click="sidebarOpen = !sidebarOpen"
-                        class="rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden focus:outline-none focus:ring-2 focus:ring-teal-500"
+                        class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-2 text-slate-400 hover:bg-slate-800 hover:text-white lg:hidden focus:outline-none focus:ring-2 focus:ring-teal-500"
                         :aria-expanded="sidebarOpen"
                         aria-controls="admin-mobile-drawer"
                         aria-label="Toggle admin sidebar"
@@ -76,7 +78,7 @@
                 <div class="flex items-center gap-3 text-sm">
                     <!-- Switch to app -->
                     @if (auth()->user()->hasAnyRole(['admin', 'super_admin', 'moderator']))
-                        <a href="{{ route('dashboard') }}" class="hidden sm:inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-1.5 text-xs font-semibold text-slate-200 transition hover:border-slate-600 hover:bg-slate-700 hover:text-white">
+                        <a href="{{ route('dashboard') }}" class="hidden sm:inline-flex min-h-[44px] items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800/80 px-3 py-2 text-sm font-semibold text-slate-200 transition hover:border-slate-600 hover:bg-slate-700 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500">
                             <svg class="h-3.5 w-3.5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                             </svg>
@@ -101,7 +103,7 @@
 
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-300 transition hover:bg-rose-950 hover:text-rose-200 hover:border-rose-800 border border-slate-700" aria-label="Log out of admin panel">
+                        <button type="submit" class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg bg-slate-800 px-3 py-2 text-sm font-semibold text-slate-300 transition hover:bg-rose-950 hover:text-rose-200 hover:border-rose-800 border border-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-600" aria-label="Log out of admin panel">
                             Log out
                         </button>
                     </form>
@@ -129,7 +131,7 @@
 
                         <nav class="space-y-1" aria-label="Admin sidebar navigation">
                             @if (auth()->user()->isAdmin())
-                                <a href="{{ route('admin.dashboard') }}" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.dashboard') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
+                                <a href="{{ route('admin.dashboard') }}" class="group flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.dashboard') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
                                     <svg class="h-4 w-4 {{ request()->routeIs('admin.dashboard') ? 'text-teal-400' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
                                     </svg>
@@ -138,7 +140,7 @@
                             @endif
 
                             @if (auth()->user()->canModerate())
-                                <a href="{{ route('admin.tasks.index') }}" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.tasks.*') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
+                                <a href="{{ route('admin.tasks.index') }}" class="group flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.tasks.*') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
                                     <svg class="h-4 w-4 {{ request()->routeIs('admin.tasks.*') ? 'text-teal-400' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                     </svg>
@@ -147,7 +149,7 @@
                             @endif
 
                             @if (auth()->user()->isAdmin())
-                                <a href="{{ route('admin.users.index') }}" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.users.*') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
+                                <a href="{{ route('admin.users.index') }}" class="group flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.users.*') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
                                     <svg class="h-4 w-4 {{ request()->routeIs('admin.users.*') ? 'text-teal-400' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                                     </svg>
@@ -156,14 +158,14 @@
                             @endif
 
                             @if (auth()->user()->isSuperAdmin())
-                                <a href="{{ route('admin.settings.index') }}" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.settings.*') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
+                                <a href="{{ route('admin.settings.index') }}" class="group flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.settings.*') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
                                     <svg class="h-4 w-4 {{ request()->routeIs('admin.settings.*') ? 'text-teal-400' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
                                     System Settings
                                 </a>
-                                <a href="{{ route('admin.audit-logs.index') }}" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.audit-logs.*') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
+                                <a href="{{ route('admin.audit-logs.index') }}" class="group flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition {{ request()->routeIs('admin.audit-logs.*') ? 'bg-slate-900 dark:bg-slate-700 text-white shadow-sm' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-slate-900 dark:hover:text-white' }}">
                                     <svg class="h-4 w-4 {{ request()->routeIs('admin.audit-logs.*') ? 'text-teal-400' : 'text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300' }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                                     </svg>
@@ -175,7 +177,7 @@
                                 <hr class="border-slate-100 dark:border-slate-700" />
                             </div>
 
-                            <a href="{{ route('dashboard') }}" class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-teal-800 dark:hover:text-teal-300 transition">
+                            <a href="{{ route('dashboard') }}" class="group flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700/60 hover:text-teal-800 dark:hover:text-teal-300 transition">
                                 <svg class="h-4 w-4 text-slate-400 group-hover:text-teal-700 dark:group-hover:text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
                                 </svg>
@@ -244,7 +246,32 @@
             x-transition:leave-start="translate-x-0"
             x-transition:leave-end="-translate-x-full"
             id="admin-mobile-drawer"
-            data-focus-trap
+            x-data="{
+                focusables() {
+                    return [...this.$el.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex=\'-1\'])')].filter(el => !el.hasAttribute('disabled') && !el.hasAttribute('hidden') && el.offsetParent !== null);
+                },
+                firstFocusable() { return this.focusables()[0] },
+                lastFocusable() { return this.focusables()[this.focusables().length - 1] },
+                handleTrapKeydown(e) {
+                    if (e.key === 'Tab' || e.key === 'Shift+Tab') {
+                        if (e.shiftKey) {
+                            if (this.$el.contains(document.activeElement) && document.activeElement === this.firstFocusable()) {
+                                e.preventDefault(); this.lastFocusable().focus();
+                            }
+                        } else {
+                            if (this.$el.contains(document.activeElement) && document.activeElement === this.lastFocusable()) {
+                                e.preventDefault(); this.firstFocusable().focus();
+                            }
+                        }
+                    }
+                    if (e.key === 'Escape') { sidebarOpen = false; }
+                }
+            }"
+            x-on:keydown.escape="sidebarOpen = false"
+            x-on:keydown.tab="handleTrapKeydown($event)"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Admin navigation menu"
             class="fixed inset-y-0 left-0 z-50 w-72 max-w-[calc(100vw-2rem)] bg-white dark:bg-slate-900 p-6 shadow-2xl lg:hidden flex flex-col justify-between"
         >
             <div>
@@ -255,7 +282,7 @@
                         </div>
                         <span class="font-bold text-slate-900 dark:text-white">Admin Navigation</span>
                     </div>
-                    <button type="button" @click="sidebarOpen = false" aria-label="Close navigation menu" class="rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200">
+                    <button type="button" @click="sidebarOpen = false" aria-label="Close navigation menu" class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg p-2 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-700 dark:hover:text-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500">
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>

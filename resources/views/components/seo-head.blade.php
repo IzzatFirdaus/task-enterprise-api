@@ -39,6 +39,7 @@
 <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 <link rel="icon" href="{{ asset('favicon-32x32.svg') }}" type="image/svg+xml" sizes="32x32">
 <link rel="icon" href="{{ asset('favicon-192x192.svg') }}" type="image/svg+xml" sizes="192x192">
+<link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
 <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.svg') }}" sizes="180x180">
 <link rel="manifest" href="{{ asset('site.webmanifest') }}">
 <meta name="theme-color" content="#0e7490">

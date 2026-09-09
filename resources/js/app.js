@@ -1,4 +1,4 @@
-// Alpine.js is managed by Livewire v4 — do not import it here.
+// Alpine.js is managed by Livewire v4. Do not import it here.
 
 const applyInitialTheme = () => {
 	const stored = localStorage.getItem('theme');
@@ -122,6 +122,9 @@ const initEnhancements = () => {
 		if (cookieChoice) {
 			localStorage.setItem('cookieChoice', cookieChoice.dataset.cookieChoice);
 			document.querySelector('#cookie-banner')?.setAttribute('hidden', '');
+			if (cookieChoice.dataset.cookieChoice === 'accept') {
+				loadAnalytics();
+			}
 		}
 		const dialogClose = event.target.closest('[data-dialog-close]');
 		if (dialogClose) document.querySelector('#site-confirmation')?.close();
@@ -164,7 +167,11 @@ const initEnhancements = () => {
 	});
 
 	if (!localStorage.getItem('cookieChoice')) {
-		window.setTimeout(() => { document.querySelector('#cookie-banner')?.removeAttribute('hidden'); }, 700);
+		const banner = document.querySelector('#cookie-banner');
+		window.setTimeout(() => {
+			banner?.removeAttribute('hidden');
+			banner?.querySelector('[data-cookie-choice]')?.focus();
+		}, 700);
 	}
 
 	document.querySelectorAll('input[type="password"]').forEach((input) => {
@@ -288,3 +295,60 @@ const initEnhancements = () => {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initEnhancements);
 else initEnhancements();
+
+const loadAnalytics = () => {
+	const id = window.analyticsMeasurementId;
+	if (!id || document.querySelector(`script[data-analytics-id="${id}"]`)) return;
+	const script = document.createElement('script');
+	script.async = true;
+	script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+	script.dataset.analyticsId = id;
+	document.head.appendChild(script);
+	const inline = document.createElement('script');
+	inline.textContent = `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', ${JSON.stringify(id)}, { anonymize_ip: true });`;
+	document.head.appendChild(inline);
+};
+
+if (localStorage.getItem('cookieChoice') === 'accept') {
+	loadAnalytics();
+}
+
+document.addEventListener('mouseover', (event) => {
+	const trigger = event.target.closest('[data-tooltip]');
+	if (!trigger) return;
+	const existing = trigger.querySelector(':scope > .tooltip-bubble');
+	if (existing) return;
+	const bubble = document.createElement('span');
+	bubble.className = 'tooltip-bubble';
+	bubble.setAttribute('role', 'tooltip');
+	bubble.textContent = trigger.dataset.tooltip;
+	trigger.appendChild(bubble);
+	requestAnimationFrame(() => bubble.classList.add('tooltip-bubble-visible'));
+});
+
+document.addEventListener('mouseout', (event) => {
+	const trigger = event.target.closest('[data-tooltip]');
+	if (!trigger) return;
+	const bubble = trigger.querySelector(':scope > .tooltip-bubble');
+	if (bubble) bubble.remove();
+});
+
+document.addEventListener('focusin', (event) => {
+	const trigger = event.target.closest('[data-tooltip]');
+	if (!trigger) return;
+	const bubble = document.createElement('span');
+	bubble.className = 'tooltip-bubble tooltip-bubble-visible';
+	bubble.setAttribute('role', 'tooltip');
+	bubble.id = `${trigger.id || 'tooltip'}-content`;
+	bubble.textContent = trigger.dataset.tooltip;
+	trigger.appendChild(bubble);
+	trigger.setAttribute('aria-describedby', bubble.id);
+});
+
+document.addEventListener('focusout', (event) => {
+	const trigger = event.target.closest('[data-tooltip]');
+	if (!trigger) return;
+	const bubble = trigger.querySelector(':scope > .tooltip-bubble');
+	if (bubble) bubble.remove();
+	trigger.removeAttribute('aria-describedby');
+});

@@ -10,10 +10,23 @@
 - `/capabilities/task-capture`, `/capabilities/progress-tracking`, `/capabilities/secure-apis`, `/capabilities/administrative-governance`: dedicated capability pages.
 - `/blog`: product and operational-practice journal.
 - `/blog/{post}`: individual journal articles.
+- `/faq`: frequently asked questions.
 - `/terms`: terms of service.
-- `/login`, `/register`, `/forgot-password`, `/reset-password/{token}`, `/verify-email`, `/admin/login`: account access forms (noindex).
+- `/privacy`: privacy policy.
+- `/cookie-policy`: cookie policy and choices.
+
+## Account access forms (noindex, nofollow)
+
+- `/login`, `/register`, `/forgot-password`, `/reset-password/{token}`, `/verify-email`
+- `/admin/login`: staff entry point.
+
+## Operational endpoints
+
+- `/healthz`: liveness probe.
+- `/readyz`: readiness probe.
 - `/sitemap.xml`: indexable public URLs.
-- `/robots.txt`: crawler directives and sitemap reference.
+- `/robots.txt`: crawler directives.
+- `/llms.txt`: this document for LLM crawlers.
 
 ## Authenticated application (not indexable)
 
@@ -25,11 +38,11 @@
 ## Administrative workspace (not indexable)
 
 - `/admin/dashboard`, `/admin/stats`: role-protected operational overview.
-- `/admin/tasks`, `/admin/tasks/{task}/...`: moderation, status, reassignment, restoration.
+- `/admin/tasks`, `/admin/tasks/{task}/...`: moderation, status, reassignment, restoration, bulk action.
 - `/admin/users`, `/admin/users/{user}/...`: user management, suspension, role removal.
 - `/admin/settings` (super_admin): system-wide configuration.
 - `/admin/audit-logs`, `/admin/audit-logs/export` (super_admin): recorded administrative activity history.
-- `/api/admin/*`: Sanctum-protected administrative endpoints.
+- `/api/admin/*`, `/api/v1/admin/*`: Sanctum-protected administrative endpoints.
 
 ## Boundaries
 
@@ -37,6 +50,7 @@
 - Admin authorization is role-based (`admin`, `super_admin`, `moderator`) and distinct from personal task flows.
 - All administrative mutations are recorded in `audit_logs`.
 - `/dashboard`, `/profile`, `/admin/`, `/api/`, and the auth flows are `noindex,nofollow`.
+- The canonical authorization source is the `role` relationship; the legacy `is_admin` flag is compatibility-only.
 
 ## Stack
 

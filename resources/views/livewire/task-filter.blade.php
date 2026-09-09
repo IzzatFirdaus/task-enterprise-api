@@ -11,7 +11,7 @@
             type="search"
             wire:model.live.debounce.300ms="search"
             placeholder="Search tasks..."
-            class="min-h-[44px] w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 pl-9 pr-3.5 py-2 text-xs font-semibold text-slate-950 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 dark:focus-visible:ring-teal-400 focus-visible:border-teal-600"
+            class="min-h-[44px] w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 pl-9 pr-3.5 py-2 text-base leading-relaxed text-slate-950 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 dark:focus-visible:ring-teal-400 focus-visible:border-teal-600"
         >
     </div>
 
@@ -20,7 +20,7 @@
         <select
             id="task-status-filter"
             wire:model.live="status"
-            class="min-h-[44px] rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 py-2 pl-3.5 pr-8 text-xs font-semibold text-slate-950 dark:text-slate-100 shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 dark:focus-visible:ring-teal-400 focus-visible:border-teal-600"
+            class="min-h-[44px] rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 py-2 pl-3.5 pr-8 text-base leading-relaxed text-slate-950 dark:text-slate-100 shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 dark:focus-visible:ring-teal-400 focus-visible:border-teal-600"
         >
             <option value="all">All statuses</option>
             <option value="pending">Pending</option>

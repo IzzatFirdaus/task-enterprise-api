@@ -27,7 +27,7 @@
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">User Identity</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Name and email address.</p>
+                    <p class="mt-2 text-base leading-relaxed text-slate-700 dark:text-slate-300">Name and email address.</p>
                 </div>
 
                 <div class="grid gap-6 md:grid-cols-2">
@@ -37,7 +37,7 @@
                             type="text"
                             name="name"
                             value="{{ old('name', $user->name) }}"
-                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
+                            class="min-h-[44px] w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-base leading-relaxed text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                             required
                         />
                         @error('name')
@@ -51,7 +51,7 @@
                             type="email"
                             name="email"
                             value="{{ old('email', $user->email) }}"
-                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-sm text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
+                            class="min-h-[44px] w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-base leading-relaxed text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                             required
                         />
                         @error('email')
@@ -65,7 +65,7 @@
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">Role Permissions</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Assign roles to this user.</p>
+                    <p class="mt-2 text-base leading-relaxed text-slate-700 dark:text-slate-300">Assign roles to this user.</p>
                 </div>
 
                 <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
@@ -97,7 +97,7 @@
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-3">
                     <h2 class="text-base font-semibold text-slate-900 dark:text-white">Account Access Status</h2>
-                    <p class="text-xs text-slate-500 dark:text-slate-400">Suspend or restore this account.</p>
+                    <p class="mt-2 text-base leading-relaxed text-slate-700 dark:text-slate-300">Suspend or restore this account.</p>
                 </div>
 
                 <div class="rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-900/60 p-4 space-y-3">
@@ -117,7 +117,7 @@
                         <textarea
                             name="suspension_reason"
                             rows="2"
-                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
+                            class="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3.5 py-2 text-base leading-relaxed text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                             placeholder="Reason for suspension (optional)"
                         >{{ old('suspension_reason', $user->suspension_reason) }}</textarea>
                         @error('suspension_reason')
@@ -128,11 +128,11 @@
             </div>
 
             <!-- Action Buttons -->
-            <div class="flex items-center justify-end gap-3">
-                <a href="{{ route('admin.users.index') }}" class="rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-2xs hover:bg-slate-50 dark:hover:bg-slate-700">
+            <div class="flex flex-wrap items-center justify-end gap-3">
+                <a href="{{ route('admin.users.index') }}" class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-4 py-2.5 text-base font-semibold text-slate-700 dark:text-slate-200 shadow-2xs hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
                     Cancel
                 </a>
-                <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
+                <button type="submit" class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-xl bg-teal-700 hover:bg-teal-800 dark:bg-teal-600 dark:hover:bg-teal-500 px-5 py-2.5 text-base font-semibold text-white shadow-sm transition focus:outline-none focus:ring-2 focus:ring-teal-600 focus:ring-offset-2 dark:focus:ring-offset-slate-900">
                     Save Changes
                 </button>
             </div>

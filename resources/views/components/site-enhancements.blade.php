@@ -25,16 +25,22 @@
 
 <div id="site-toast" class="site-toast" role="status" aria-live="polite" hidden></div>
 
-<div id="cookie-banner" class="cookie-banner" role="region" aria-label="Privacy choices" hidden>
-    <div>
-        <p class="font-semibold">A little privacy housekeeping</p>
-        <p class="mt-1 text-sm">We use essential storage for preferences and session attribution. No advertising cookies are added.</p>
+<div id="cookie-banner" class="cookie-banner" role="region" aria-label="Privacy choices" aria-describedby="cookie-banner-text" hidden>
+    <div class="cookie-banner-text">
+        <p id="cookie-banner-text" class="text-base font-semibold leading-snug">A little privacy housekeeping</p>
+        <p class="mt-1 text-sm leading-relaxed">Essential storage keeps your session and preferences. Analytics, if enabled, load only after you accept. <a href="{{ route('cookie-policy') }}" class="font-semibold underline underline-offset-2">Read the cookie policy</a>.</p>
     </div>
-    <div class="cookie-actions">
-        <button type="button" class="cookie-button cookie-button-muted" data-cookie-choice="decline">Decline</button>
-        <button type="button" class="cookie-button cookie-button-primary" data-cookie-choice="accept">Accept</button>
+    <div class="cookie-actions" role="group" aria-label="Cookie choice">
+        <button type="button" class="cookie-button cookie-button-muted" data-cookie-choice="decline">Decline non-essential</button>
+        <button type="button" class="cookie-button cookie-button-muted" data-cookie-choice="accept">Accept analytics</button>
     </div>
 </div>
+
+@if (config('app.seo.analytics_id'))
+    <script>
+        window.analyticsMeasurementId = @json(config('app.seo.analytics_id'));
+    </script>
+@endif
 
 <button type="button" id="back-to-top" class="back-to-top icon-button" aria-label="Back to top" title="Back to top" hidden>
     &uarr;

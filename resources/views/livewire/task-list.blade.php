@@ -19,7 +19,7 @@
                     </svg>
                 </div>
                 <h4 class="mt-4 text-sm font-bold text-slate-950 dark:text-white">No tasks found</h4>
-                <p class="mt-1 text-xs text-slate-600 dark:text-slate-400 max-w-sm">No tasks match your selected filter. Create a new task or change the status filter above.</p>
+                <p class="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400 max-w-sm">No tasks match your selected filter. Create a new task or change the status filter above.</p>
             </div>
         @else
             <!-- Mobile Card Layout -->

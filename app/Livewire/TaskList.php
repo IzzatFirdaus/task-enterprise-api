@@ -56,7 +56,7 @@ class TaskList extends Component
         return Task::query()
             ->where('user_id', Auth::id())
             ->when($this->search !== '', fn (Builder $query) => $query->where(function (Builder $query): void {
-                $query->where('title', 'like', "%{$this->search}%")
+                $query->where('title', 'like', "{$this->search}%")
                     ->orWhere('description', 'like', "%{$this->search}%");
             }))
             ->when($this->status !== 'all', fn (Builder $query) => $query->byStatus($this->status));

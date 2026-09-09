@@ -17,15 +17,17 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <meta name="robots" content="index,follow">
+        <meta name="robots" content="noindex,nofollow">
         <link rel="canonical" href="{{ request()->url() }}">
         <meta name="description" content="@yield('description', $pageDescription)">
         <title>@yield('title', $pageTitle) | {{ config('app.name', 'Enterprise Tasks') }}</title>
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
         <link rel="icon" href="{{ asset('favicon-32x32.svg') }}" type="image/svg+xml" sizes="32x32">
         <link rel="icon" href="{{ asset('favicon-192x192.svg') }}" type="image/svg+xml" sizes="192x192">
+        <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
         <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.svg') }}" sizes="180x180">
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
+        <meta name="theme-color" content="#0e7490">
         @if (config('app.seo.google_verification'))
             <meta name="google-site-verification" content="{{ config('app.seo.google_verification') }}">
         @endif
@@ -130,7 +132,32 @@
                     x-transition:leave="transition ease-in duration-100"
                     x-transition:leave-start="opacity-100 translate-y-0"
                     x-transition:leave-end="opacity-0 -translate-y-2"
-                    data-focus-trap
+                    x-data="{
+                        focusables() {
+                            return [...this.$el.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex=\'-1\'])')].filter(el => !el.hasAttribute('disabled') && !el.hasAttribute('hidden') && el.offsetParent !== null);
+                        },
+                        firstFocusable() { return this.focusables()[0] },
+                        lastFocusable() { return this.focusables()[this.focusables().length - 1] },
+                        handleTrapKeydown(e) {
+                            if (e.key === 'Tab' || e.key === 'Shift+Tab') {
+                                if (e.shiftKey) {
+                                    if (this.$el.contains(document.activeElement) && document.activeElement === this.firstFocusable()) {
+                                        e.preventDefault(); this.lastFocusable().focus();
+                                    }
+                                } else {
+                                    if (this.$el.contains(document.activeElement) && document.activeElement === this.lastFocusable()) {
+                                        e.preventDefault(); this.firstFocusable().focus();
+                                    }
+                                }
+                            }
+                            if (e.key === 'Escape') { mobileMenuOpen = false; }
+                        }
+                    }"
+                    x-on:keydown.escape="mobileMenuOpen = false"
+                    x-on:keydown.tab="handleTrapKeydown($event)"
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Mobile navigation menu"
                     class="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 shadow-lg md:hidden"
                 >
                     <nav class="space-y-1" aria-label="Mobile navigation">

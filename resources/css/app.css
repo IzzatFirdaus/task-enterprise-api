@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
 	--workspace-bg: #f8fafc;
@@ -124,7 +124,7 @@ body { transition: background-color 180ms ease, color 180ms ease; }
 	transition: width 80ms linear;
 }
 
-.search-launch { position: fixed; top: 0.75rem; right: 1rem; z-index: 75; min-height: 2.75rem; min-width: 2.75rem; border: 1px solid #cbd5e1; border-radius: 0.55rem; background: rgb(255 255 255 / 0.95); padding: 0.35rem 0.65rem; color: #0f766e; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 10px rgb(15 23 42 / 0.08); }
+.search-launch { position: fixed; bottom: 1rem; left: 1rem; z-index: 75; min-height: 2.75rem; min-width: 2.75rem; border: 1px solid #cbd5e1; border-radius: 0.55rem; background: rgb(255 255 255 / 0.95); padding: 0.35rem 0.65rem; color: #0f766e; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: 0 2px 10px rgb(15 23 42 / 0.08); }
 .dark .search-launch { border-color: #475569; background: rgb(30 41 59 / 0.95); color: #2dd4bf; }
 .search-launch:hover { background: #f0fdfa; }
 .dark .search-launch:hover { background: #134e4a; }
@@ -157,12 +157,15 @@ body { transition: background-color 180ms ease, color 180ms ease; }
 .cookie-banner { position: fixed; right: 1rem; bottom: 1rem; z-index: 85; display: flex; width: min(34rem, calc(100% - 2rem)); align-items: center; justify-content: space-between; gap: 1rem; border: 1px solid #cbd5e1; border-radius: 0.9rem; background: white; padding: 1rem; color: #0f172a; box-shadow: 0 12px 40px rgb(15 23 42 / 0.16); }
 .cookie-banner:not([hidden]) ~ .back-to-top, .cookie-banner:not([hidden]) ~ .contact-button { display: none; }
 .dark .cookie-banner { border-color: #334155; background: #1e293b; color: #f8fafc; }
+.cookie-banner-text { flex: 1 1 auto; min-width: 0; }
 .cookie-actions { display: flex; flex-shrink: 0; gap: 0.5rem; }
-.cookie-button { min-height: 2.75rem; min-width: 2.75rem; border: 1px solid #0f766e; border-radius: 0.55rem; padding: 0.6rem 0.8rem; font-size: 0.8rem; font-weight: 700; cursor: pointer; }
+.cookie-button { min-height: 44px; min-width: 44px; border: 1px solid #0f766e; border-radius: 0.55rem; padding: 0.55rem 0.95rem; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background-color 150ms ease, color 150ms ease; }
 .cookie-button-primary { background: #0f766e; color: white; }
 .dark .cookie-button-primary { background: #0d9488; color: white; border-color: #0d9488; }
 .cookie-button-muted { background: white; color: #0f766e; }
 .dark .cookie-button-muted { background: #1e293b; color: #2dd4bf; border-color: #2dd4bf; }
+.cookie-button-muted:hover { background: #0f766e; color: white; }
+.dark .cookie-button-muted:hover { background: #0d9488; color: white; border-color: #0d9488; }
 .back-to-top { position: fixed; right: 1rem; bottom: 5.5rem; z-index: 70; background: #0f766e; color: white; box-shadow: 0 8px 24px rgb(15 23 42 / 0.2); }
 .dark .back-to-top { background: #0d9488; }
 .contact-button { position: fixed; right: 1rem; bottom: 1rem; z-index: 70; display: grid; width: 2.8rem; height: 2.8rem; place-items: center; border-radius: 50%; background: #0f766e; color: white; font-size: 1.25rem; font-weight: 800; box-shadow: 0 8px 24px rgb(15 23 42 / 0.22); transition: transform 150ms ease, background-color 150ms ease; }
@@ -170,6 +173,10 @@ body { transition: background-color 180ms ease, color 180ms ease; }
 .contact-button:hover { transform: translateY(-3px); background: #115e59; }
 .dark .contact-button:hover { background: #14b8a6; }
 .site-toast { position: fixed; right: 1rem; bottom: 1rem; z-index: 100; border-radius: 0.7rem; background: #0f172a; padding: 0.8rem 1rem; color: white; font-size: 0.875rem; box-shadow: 0 10px 30px rgb(15 23 42 / 0.25); }
+.tooltip-bubble { position: absolute; z-index: 60; max-width: 16rem; transform: translate(-50%, calc(-100% - 0.5rem)); padding: 0.4rem 0.7rem; border-radius: 0.45rem; background: #0f172a; color: #f8fafc; font-size: 0.75rem; line-height: 1.35; text-align: center; pointer-events: none; opacity: 0; transition: opacity 120ms ease, transform 120ms ease; box-shadow: 0 6px 18px rgb(15 23 42 / 0.22); }
+.dark .tooltip-bubble { background: #f8fafc; color: #0f172a; }
+.tooltip-bubble-visible { opacity: 1; }
+[data-tooltip] { position: relative; }
 .confirmation-dialog { width: min(100% - 2rem, 32rem); border: 0; padding: 0; background: transparent; }
 .confirmation-dialog::backdrop { background: rgb(15 23 42 / 0.72); }
 .password-field { position: relative; }

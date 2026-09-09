@@ -58,6 +58,7 @@ return [
         'google_verification' => env('GOOGLE_SITE_VERIFICATION'),
         'contact_email' => env('CONTACT_EMAIL', 'support@example.com'),
         'contact_phone' => env('CONTACT_PHONE'),
+        'analytics_id' => env('ANALYTICS_ID'),
     ],
 
     /*

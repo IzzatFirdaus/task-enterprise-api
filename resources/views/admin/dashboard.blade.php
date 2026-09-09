@@ -2,71 +2,71 @@
 
 @section('content')
     <div class="space-y-6">
-        <div class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
+        <header class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-4xl">System activity</h1>
-                <p class="mt-2 max-w-xl text-sm leading-6 text-slate-600 dark:text-slate-300">Review account access, workload status, and recorded administrative actions.</p>
+                <p class="mt-2 max-w-xl text-base leading-relaxed text-slate-700 dark:text-slate-200">Review account access, workload status, and recorded administrative actions.</p>
             </div>
-            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ now()->format('l, M j, Y') }}</p>
-        </div>
+            <p class="text-base font-medium text-slate-600 dark:text-slate-300"><time datetime="{{ now()->toDateString() }}">{{ now()->format('l, M j, Y') }}</time></p>
+        </header>
 
         <!-- 4 Metric Cards -->
-        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <section class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Service metrics summary">
             <!-- Total Users -->
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-5">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total Users</span>
+                    <span class="text-sm font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">Total Users</span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
                     <span class="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">{{ $stats['total_users'] ?? 0 }}</span>
-                    <span class="text-xs text-slate-600 dark:text-slate-400">accounts</span>
+                    <span class="text-sm text-slate-700 dark:text-slate-300">accounts</span>
                 </div>
             </div>
 
             <!-- Total Tasks -->
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-5">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-400">Total Tasks</span>
+                    <span class="text-sm font-semibold uppercase tracking-wider text-teal-800 dark:text-teal-300">Total Tasks</span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
-                    <span class="text-3xl font-bold tracking-tight text-teal-700 dark:text-teal-400">{{ $stats['total_tasks'] ?? 0 }}</span>
-                    <span class="text-xs text-teal-700 dark:text-teal-500">tasks</span>
+                    <span class="text-3xl font-bold tracking-tight text-teal-800 dark:text-teal-300">{{ $stats['total_tasks'] ?? 0 }}</span>
+                    <span class="text-sm text-teal-800 dark:text-teal-300">tasks</span>
                 </div>
             </div>
 
             <!-- Suspended Users -->
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-5">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-rose-700 dark:text-rose-400">Suspended Users</span>
+                    <span class="text-sm font-semibold uppercase tracking-wider text-rose-800 dark:text-rose-300">Suspended Users</span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
-                    <span class="text-3xl font-bold tracking-tight text-rose-700 dark:text-rose-400">{{ $stats['suspended_users'] ?? 0 }}</span>
-                    <span class="text-xs text-rose-700 dark:text-rose-500">suspended</span>
+                    <span class="text-3xl font-bold tracking-tight text-rose-800 dark:text-rose-300">{{ $stats['suspended_users'] ?? 0 }}</span>
+                    <span class="text-sm text-rose-800 dark:text-rose-300">suspended</span>
                 </div>
             </div>
 
             <!-- Recent Activity -->
             <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-5">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs font-semibold uppercase tracking-wider text-teal-700 dark:text-teal-400">Recent Activity</span>
+                    <span class="text-sm font-semibold uppercase tracking-wider text-teal-800 dark:text-teal-300">Recent Activity</span>
                 </div>
                 <div class="mt-3 flex items-baseline gap-2">
-                    <span class="text-3xl font-bold tracking-tight text-teal-700 dark:text-teal-400">{{ $stats['recent_activity'] ?? 0 }}</span>
-                    <span class="text-xs text-teal-700 dark:text-teal-500">audit events</span>
+                    <span class="text-3xl font-bold tracking-tight text-teal-800 dark:text-teal-300">{{ $stats['recent_activity'] ?? 0 }}</span>
+                    <span class="text-sm text-teal-800 dark:text-teal-300">audit events</span>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Task Status Breakdown & Quick Actions Grid -->
         <div class="grid gap-6 lg:grid-cols-3">
             <!-- Breakdown Progress Bars -->
-            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm lg:col-span-2">
+            <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6 shadow-sm lg:col-span-2" aria-labelledby="task-status-distribution">
                 <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-4">
-                    <h2 class="text-base font-semibold text-slate-900 dark:text-white">Task Status Distribution</h2>
-                    <span class="text-xs text-slate-600 dark:text-slate-400">Total: {{ $stats['total_tasks'] ?? 0 }}</span>
+                    <h2 id="task-status-distribution" class="text-lg font-semibold text-slate-900 dark:text-white">Task status distribution</h2>
+                    <span class="text-sm text-slate-700 dark:text-slate-300">Total: {{ $stats['total_tasks'] ?? 0 }}</span>
                 </div>
                 <div class="mt-5 space-y-4">
-                    @foreach ($stats['tasks_by_status'] ?? [] as $status => $count)
+                    @forelse ($stats['tasks_by_status'] ?? [] as $status => $count)
                         @php
                             $statusWidth = min(($count / max(1, (int) ($stats['total_tasks'] ?? 1))) * 100, 100);
                             $color = match ($status) {
@@ -74,32 +74,39 @@
                                 'in_progress' => 'bg-teal-600',
                                 default => 'bg-amber-500',
                             };
+                            $label = match ($status) {
+                                'completed' => 'Completed tasks',
+                                'in_progress' => 'In progress tasks',
+                                default => 'Pending tasks',
+                            };
                         @endphp
                         <div>
-                            <div class="mb-1.5 flex items-center justify-between text-xs font-medium text-slate-700 dark:text-slate-300">
+                            <div class="mb-1.5 flex items-center justify-between text-sm font-medium text-slate-800 dark:text-slate-200">
                                 <div class="flex items-center gap-2">
-                                    <span class="h-2 w-2 rounded-full {{ $color }}"></span>
+                                    <span class="h-2 w-2 rounded-full {{ $color }}" aria-hidden="true"></span>
                                     <span class="capitalize">{{ str_replace('_', ' ', $status) }}</span>
                                 </div>
-                                <span class="text-slate-500 dark:text-slate-400 font-semibold">{{ $count }} ({{ number_format($statusWidth, 0) }}%)</span>
+                                <span class="text-slate-700 dark:text-slate-300 font-semibold" aria-label="{{ $label }}: {{ $count }}">{{ $count }} ({{ number_format($statusWidth, 0) }}%)</span>
                             </div>
-                            <div class="h-2.5 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700 ring-1 ring-slate-200 dark:ring-slate-600 ring-inset">
+                            <div class="h-2.5 overflow-hidden rounded-full bg-slate-100 ring-1 ring-slate-200 ring-inset dark:bg-slate-700 dark:ring-slate-600" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ number_format($statusWidth, 0) }}" aria-label="{{ $label }} share of total">
                                 <div
                                     class="h-full rounded-full {{ $color }} transition-all duration-500"
                                     @style(['width' => $statusWidth . '%'])
                                 ></div>
                             </div>
                         </div>
-                    @endforeach
+                    @empty
+                        <p class="text-base leading-relaxed text-slate-600 dark:text-slate-400">No task status data available yet.</p>
+                    @endforelse
                 </div>
-            </div>
+            </section>
 
             <!-- Quick Action Cards -->
-            <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6">
+            <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6" aria-labelledby="quick-actions">
                 <div class="border-b border-slate-100 dark:border-slate-700 pb-4">
-                    <h2 class="text-base font-semibold text-slate-900 dark:text-white">Quick Actions</h2>
+                    <h2 id="quick-actions" class="text-lg font-semibold text-slate-900 dark:text-white">Quick actions</h2>
                 </div>
-                <div class="mt-4 space-y-2.5">
+                <nav class="mt-4 space-y-2.5" aria-label="Quick administrative actions">
                     @if (auth()->user()->isAdmin())
                         <a href="{{ route('admin.users.index') }}" class="group flex min-h-[44px] items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 p-3.5 text-xs font-semibold text-slate-800 dark:text-slate-200 transition hover:border-teal-600 dark:hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-teal-950/40 hover:text-teal-800 dark:hover:text-teal-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
                             <span class="flex items-center gap-2.5">
@@ -132,9 +139,9 @@
                             </span>
                         </a>
 
-                        <a href="{{ route('admin.settings.index') }}" class="group flex min-h-[44px] items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 p-3.5 text-xs font-semibold text-slate-800 dark:text-slate-200 transition hover:border-teal-600 dark:hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-teal-950/40 hover:text-teal-800 dark:hover:text-teal-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
+                        <a href="{{ route('admin.settings.index') }}" class="group flex min-h-[44px] min-w-[44px] items-center justify-between rounded-xl border border-slate-200 dark:border-slate-700 p-3.5 text-sm font-semibold text-slate-800 dark:text-slate-200 transition hover:border-teal-600 dark:hover:border-teal-500 hover:bg-teal-50/50 dark:hover:bg-teal-950/40 hover:text-teal-800 dark:hover:text-teal-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
                             <span class="flex items-center gap-2.5">
-                                <svg class="h-4 w-4 text-slate-400 group-hover:text-teal-700 dark:group-hover:text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                                <svg class="h-4 w-4 text-slate-400 group-hover:text-teal-700 dark:group-hover:text-teal-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
@@ -142,47 +149,43 @@
                             </span>
                         </a>
                     @endif
-                </div>
-            </div>
+                </nav>
+            </section>
         </div>
 
         <!-- Recent Activity Audit Stream -->
-        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6">
+        <section class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800 p-6" aria-labelledby="recent-activity">
             <div class="mb-4 flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-4">
                 <div>
-                    <h2 class="text-base font-semibold text-slate-900 dark:text-white">Recent Administrative Actions</h2>
+                    <h2 id="recent-activity" class="text-lg font-semibold text-slate-900 dark:text-white">Recent administrative actions</h2>
                 </div>
                 @if (auth()->user()->isSuperAdmin())
-                    <a href="{{ route('admin.audit-logs.index') }}" class="rounded-md p-1 text-xs font-semibold text-teal-700 dark:text-teal-400 hover:text-teal-800 dark:hover:text-teal-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
+                    <a href="{{ route('admin.audit-logs.index') }}" class="inline-flex min-h-[44px] min-w-[44px] items-center px-2 text-sm font-semibold text-teal-700 dark:text-teal-300 hover:text-teal-800 dark:hover:text-teal-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600">
                         View all logs
                     </a>
                 @endif
             </div>
 
-            <div class="divide-y divide-slate-100 dark:divide-slate-700">
+            <ul class="divide-y divide-slate-100 dark:divide-slate-700" role="list">
                 @forelse ($recentActivity as $activity)
-                    <div class="flex items-center justify-between py-3.5">
+                    <li class="flex items-center justify-between gap-4 py-3.5">
                         <div class="flex items-center gap-3">
-                            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold">
+                            <div class="flex h-8 w-8 min-h-[32px] min-w-[32px] items-center justify-center rounded-lg bg-slate-100 text-sm font-semibold text-slate-700 dark:bg-slate-700 dark:text-slate-200" aria-hidden="true">
                                 {{ strtoupper(substr($activity->action, 0, 2)) }}
                             </div>
                             <div>
-                                <div class="text-sm font-semibold text-slate-900 dark:text-slate-100">{{ ucfirst(str_replace('_', ' ', $activity->action)) }}</div>
-                                <div class="text-xs text-slate-500 dark:text-slate-400">
-                                    <span class="font-medium text-slate-700 dark:text-slate-300">{{ $activity->admin?->name ?? 'System Admin' }}</span> &middot; {{ $activity->model_type ?? 'Entity' }} #{{ $activity->model_id ?? '-' }}
-                                </div>
+                                <p class="text-sm font-semibold text-slate-900 dark:text-slate-100">{{ ucfirst(str_replace('_', ' ', $activity->action)) }}</p>
+                                <p class="text-sm text-slate-600 dark:text-slate-300">
+                                    <span class="font-medium text-slate-800 dark:text-slate-200">{{ $activity->admin?->name ?? 'System Admin' }}</span> &middot; {{ $activity->model_type ?? 'Entity' }} #{{ $activity->model_id ?? '-' }}
+                                </p>
                             </div>
                         </div>
-                        <div class="text-xs text-slate-600 dark:text-slate-400">
-                            {{ $activity->created_at?->diffForHumans() ?? 'recently' }}
-                        </div>
-                    </div>
+                        <time class="text-sm text-slate-700 dark:text-slate-300" datetime="{{ $activity->created_at?->toISOString() }}">{{ $activity->created_at?->diffForHumans() ?? 'recently' }}</time>
+                    </li>
                 @empty
-                    <div class="py-8 text-center text-xs text-slate-500 dark:text-slate-400">
-                        No administrative operations recorded yet.
-                    </div>
+                    <li class="py-8 text-center text-sm text-slate-600 dark:text-slate-300">No administrative operations recorded yet.</li>
                 @endforelse
-            </div>
-        </div>
+            </ul>
+        </section>
     </div>
 @endsection

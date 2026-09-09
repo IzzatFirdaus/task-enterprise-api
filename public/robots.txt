@@ -6,6 +6,7 @@ Allow: /blog
 Allow: /faq
 Allow: /terms
 Allow: /privacy
+Allow: /cookie-policy
 Disallow: /dashboard
 Disallow: /profile
 Disallow: /admin/
@@ -13,5 +14,6 @@ Disallow: /api/
 Disallow: /tasks
 Disallow: /password
 Disallow: /register
+Disallow: /login
 
 Sitemap: /sitemap.xml

@@ -24,7 +24,9 @@
         <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
         <link rel="icon" href="{{ asset('favicon-32x32.svg') }}" type="image/svg+xml" sizes="32x32">
         <link rel="icon" href="{{ asset('favicon-192x192.svg') }}" type="image/svg+xml" sizes="192x192">
+        <link rel="icon" href="{{ asset('favicon.ico') }}" sizes="any">
         <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.svg') }}" sizes="180x180">
+        <meta name="theme-color" content="#0e7490">
         <link rel="manifest" href="{{ asset('site.webmanifest') }}">
         @if (config('app.seo.google_verification'))
             <meta name="google-site-verification" content="{{ config('app.seo.google_verification') }}">
@@ -43,7 +45,7 @@
                         <span class="mt-1 text-xs font-medium leading-none text-slate-500 dark:text-slate-400">Personal work queue</span>
                     </span>
                 </a>
-                <button type="button" data-theme-toggle class="inline-flex min-h-[44px] items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" aria-label="Switch between light and dark theme">Theme</button>
+                <button type="button" data-theme-toggle class="inline-flex min-h-[44px] min-w-[44px] items-center rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-2 text-sm font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600" aria-label="Switch between light and dark theme">Theme</button>
             </div>
             <h2 class="mt-4 text-center text-2xl font-bold tracking-tight text-slate-950 dark:text-white">
                 Enterprise Tasks

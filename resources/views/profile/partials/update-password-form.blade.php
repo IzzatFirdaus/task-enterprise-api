@@ -4,7 +4,7 @@
             {{ __('Update Password') }}
         </h2>
 
-        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+        <p class="mt-2 text-base leading-relaxed text-slate-700 dark:text-slate-300">
             {{ __('Ensure your account is using a long, random password to stay secure.') }}
         </p>
     </header>
@@ -15,24 +15,24 @@
 
         <div class="space-y-1">
             <x-input-label for="update_password_current_password" :value="__('Current Password')" />
-            <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" placeholder="••••••••" aria-describedby="current-password-error" aria-invalid="{{ $errors->updatePassword->has('current_password') ? 'true' : 'false' }}" />
-            <x-input-error id="current-password-error" :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+            <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full text-base leading-relaxed" autocomplete="current-password" placeholder="••••••••" aria-describedby="current-password-error" aria-invalid="{{ $errors->updatePassword->has('current_password') ? 'true' : 'false' }}" />
+            <x-input-error id="current-password-error" :messages="$errors->updatePassword->get('current_password')" class="mt-2 text-base" />
         </div>
 
         <div class="space-y-1">
             <x-input-label for="update_password_password" :value="__('New Password')" />
-            <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" placeholder="••••••••" aria-describedby="new-password-error" aria-invalid="{{ $errors->updatePassword->has('password') ? 'true' : 'false' }}" />
-            <x-input-error id="new-password-error" :messages="$errors->updatePassword->get('password')" class="mt-2" />
+            <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full text-base leading-relaxed" autocomplete="new-password" placeholder="••••••••" aria-describedby="new-password-error" aria-invalid="{{ $errors->updatePassword->has('password') ? 'true' : 'false' }}" />
+            <x-input-error id="new-password-error" :messages="$errors->updatePassword->get('password')" class="mt-2 text-base" />
         </div>
 
         <div class="space-y-1">
             <x-input-label for="update_password_password_confirmation" :value="__('Confirm Password')" />
-            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" placeholder="••••••••" aria-describedby="password-confirmation-error" aria-invalid="{{ $errors->updatePassword->has('password_confirmation') ? 'true' : 'false' }}" />
-            <x-input-error id="password-confirmation-error" :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
+            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full text-base leading-relaxed" autocomplete="new-password" placeholder="••••••••" aria-describedby="password-confirmation-error" aria-invalid="{{ $errors->updatePassword->has('password_confirmation') ? 'true' : 'false' }}" />
+            <x-input-error id="password-confirmation-error" :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2 text-base" />
         </div>
 
-        <div class="flex items-center gap-4 pt-2">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+            <x-primary-button class="min-h-[44px] min-w-[44px]">{{ __('Save') }}</x-primary-button>
 
             @if (session('status') === 'password-updated')
                 <p
@@ -40,7 +40,9 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-xs font-semibold text-emerald-600 dark:text-emerald-400"
+                    class="text-base font-semibold text-emerald-600 dark:text-emerald-400"
+                    role="status"
+                    aria-live="polite"
                 >{{ __('Saved.') }}</p>
             @endif
         </div>

@@ -5,11 +5,11 @@
         <div class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Audit log</h1>
-                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Review recorded administrative actions.</p>
+                <p class="mt-2 text-base leading-relaxed text-slate-700 dark:text-slate-300">Review recorded administrative actions.</p>
             </div>
             <a
                 href="{{ route('admin.audit-logs.export') }}"
-                class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-teal-700 dark:bg-teal-600 px-4 py-2.5 text-xs font-semibold text-white shadow-xs transition hover:bg-teal-800 dark:hover:bg-teal-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
+                class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-2 rounded-xl bg-teal-700 dark:bg-teal-600 px-4 py-2.5 text-base font-semibold text-white shadow-xs transition hover:bg-teal-800 dark:hover:bg-teal-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
             >
                 <svg class="h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />

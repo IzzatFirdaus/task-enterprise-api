@@ -5,7 +5,7 @@
         <div class="flex flex-col justify-between gap-6 border-b border-slate-300 pb-8 dark:border-slate-700 sm:flex-row sm:items-end">
             <div>
                 <h1 class="text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Moderate tasks</h1>
-                <p class="mt-2 text-sm text-slate-600 dark:text-slate-300">Review and manage tasks across all accounts.</p>
+                <p class="mt-2 text-base leading-relaxed text-slate-700 dark:text-slate-300">Review and manage tasks across all accounts.</p>
             </div>
             <div class="inline-flex items-center gap-2 rounded-xl bg-slate-50 dark:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
                 Total Moderated Tasks: <span class="font-bold text-slate-900 dark:text-white">{{ $tasks->total() }}</span>
