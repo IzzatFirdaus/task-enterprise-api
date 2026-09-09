@@ -26,7 +26,7 @@
                         <input
                             type="text"
                             name="site_name"
-                            value="{{ old('site_name', config('app.name')) }}"
+                            value="{{ old('site_name', $settings['site_name']) }}"
                             class="min-h-[44px] w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-base leading-relaxed text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                             required
                         />
@@ -40,7 +40,7 @@
                         <input
                             type="email"
                             name="admin_email"
-                            value="{{ old('admin_email', 'admin@example.com') }}"
+                            value="{{ old('admin_email', $settings['admin_email']) }}"
                             class="min-h-[44px] w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-base leading-relaxed text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                             required
                         />
@@ -65,8 +65,8 @@
                             name="maintenance_mode"
                             class="min-h-[44px] w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-base leading-relaxed text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                         >
-                            <option value="0" {{ old('maintenance_mode', config('app.env') !== 'production' ? '0' : '1') === '0' ? 'selected' : '' }}>Off</option>
-                            <option value="1" {{ old('maintenance_mode', config('app.env') === 'production' ? '1' : '0') === '1' ? 'selected' : '' }}>On</option>
+                            <option value="0" {{ old('maintenance_mode', $settings['maintenance_mode'] ? '1' : '0') === '0' ? 'selected' : '' }}>Off</option>
+                            <option value="1" {{ old('maintenance_mode', $settings['maintenance_mode'] ? '1' : '0') === '1' ? 'selected' : '' }}>On</option>
                         </select>
                         @error('maintenance_mode')
                             <p class="text-sm font-semibold text-rose-600 dark:text-rose-400" role="alert">{{ $message }}</p>
@@ -78,7 +78,7 @@
                         <input
                             type="number"
                             name="max_users"
-                            value="{{ old('max_users', 500) }}"
+                            value="{{ old('max_users', $settings['max_users']) }}"
                             class="min-h-[44px] w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 px-3.5 py-2.5 text-base leading-relaxed text-slate-900 dark:text-slate-100 shadow-xs focus:border-teal-600 dark:focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-600/20 dark:focus:ring-teal-400/20"
                         />
                         @error('max_users')

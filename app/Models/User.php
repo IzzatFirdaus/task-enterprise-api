@@ -57,15 +57,7 @@ class User extends Authenticatable
             return $this->roles->contains(fn (Role $assignedRole): bool => $assignedRole->name === $role);
         }
 
-        if ($this->roles()->exists()) {
-            return $this->roles()->where('name', $role)->exists();
-        }
-
-        if ($role === Role::ADMIN && (bool) $this->getRawOriginal('is_admin')) {
-            return true;
-        }
-
-        return $this->getRawOriginal('role') === $role;
+        return $this->roles()->where('name', $role)->exists();
     }
 
     /**
@@ -93,11 +85,6 @@ class User extends Authenticatable
         return $this->hasRole([Role::MODERATOR, Role::ADMIN, Role::SUPER_ADMIN]);
     }
 
-    public function getIsAdminAttribute(): bool
-    {
-        return $this->isAdmin();
-    }
-
     /**
      * Get the attributes that should be cast.
      *
@@ -108,7 +95,6 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_admin' => 'boolean',
             'is_suspended' => 'boolean',
             'suspended_at' => 'datetime',
             'last_admin_action_at' => 'datetime',
