@@ -17,16 +17,16 @@ Route::get('/user', function (Request $request) {
         'name' => $request->user()->name,
         'email' => $request->user()->email,
     ]]);
-})->middleware('auth:sanctum');
+})->middleware(['auth:sanctum', 'suspended']);
 
 Route::post('/logout', function (Request $request) {
     $request->user()->tokens()->delete();
     Auth::forgetGuards();
 
     return response()->noContent();
-})->middleware('auth:sanctum');
+})->middleware(['auth:sanctum', 'suspended']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'suspended'])->group(function () {
     Route::apiResource('tasks', TaskController::class)
         ->except(['create', 'edit'])
         ->names('api.tasks');
@@ -34,7 +34,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->middleware('throttle:5,1');
 
-Route::middleware(['auth:sanctum', 'role:admin,super_admin', 'throttle:60,1'])->group(function () {
+Route::middleware(['auth:sanctum', 'suspended', 'role:admin,super_admin', 'throttle:60,1'])->group(function () {
     Route::get('/admin/users', [UserManagementController::class, 'apiIndex']);
     Route::get('/admin/users/{user}', [UserManagementController::class, 'apiShow']);
     Route::put('/admin/users/{user}', [UserManagementController::class, 'apiUpdate']);
@@ -58,7 +58,7 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin', 'throttle:60,1'])->
     });
 });
 
-Route::middleware(['auth:sanctum', 'role:moderator,admin,super_admin', 'throttle:60,1'])->group(function () {
+Route::middleware(['auth:sanctum', 'suspended', 'role:moderator,admin,super_admin', 'throttle:60,1'])->group(function () {
     Route::get('/admin/tasks', [TaskModerationController::class, 'index']);
     Route::get('/admin/tasks/{task}', [TaskModerationController::class, 'show']);
     Route::put('/admin/tasks/{task}', [TaskModerationController::class, 'reassignTask']);

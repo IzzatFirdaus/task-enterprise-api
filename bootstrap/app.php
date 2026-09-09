@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CheckSuspension;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\SecurityHeaders;
 use App\Http\Middleware\SuperAdminMiddleware;
@@ -26,6 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => RoleMiddleware::class,
             'admin' => AdminMiddleware::class,
             'super_admin' => SuperAdminMiddleware::class,
+            'suspended' => CheckSuspension::class,
         ]);
 
         $middleware->redirectGuestsTo(function (Request $request): string {

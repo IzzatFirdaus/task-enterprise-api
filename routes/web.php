@@ -54,9 +54,9 @@ Route::get('/google-site-verification.html', [PublicPageController::class, 'veri
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware('auth')->name('dashboard');
+})->middleware(['auth', 'suspended'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'suspended'])->group(function () {
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
     Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
@@ -68,7 +68,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/admin/login', [AdminLoginController::class, 'store'])->middleware('throttle:5,1')->name('admin.login.store');
 });
 
-Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'suspended', 'role:admin,super_admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/stats', [AdminController::class, 'stats'])->name('admin.stats');
 
@@ -82,17 +82,17 @@ Route::middleware(['auth', 'role:admin,super_admin'])->prefix('admin')->group(fu
 
 });
 
-Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'suspended', 'role:super_admin'])->prefix('admin')->group(function () {
     Route::get('/settings', [AdminSettingsController::class, 'edit'])->name('admin.settings.index');
     Route::put('/settings', [AdminSettingsController::class, 'update'])->name('admin.settings.update');
 });
 
-Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'suspended', 'role:super_admin'])->prefix('admin')->group(function () {
     Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('admin.audit-logs.index');
     Route::get('/audit-logs/export', [AuditLogController::class, 'export'])->name('admin.audit-logs.export');
 });
 
-Route::middleware(['auth', 'role:admin,super_admin,moderator'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'suspended', 'role:admin,super_admin,moderator'])->prefix('admin')->group(function () {
     Route::get('/tasks', [TaskModerationController::class, 'index'])->name('admin.tasks.index');
     Route::delete('/tasks/{task}', [TaskModerationController::class, 'deleteTask'])->name('admin.tasks.delete');
     Route::patch('/tasks/{task}/restore', [TaskModerationController::class, 'restore'])->withTrashed()->name('admin.tasks.restore');
@@ -101,7 +101,7 @@ Route::middleware(['auth', 'role:admin,super_admin,moderator'])->prefix('admin')
     Route::post('/tasks/bulk-action', [TaskModerationController::class, 'bulkAction'])->name('admin.tasks.bulk-action');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'suspended'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
